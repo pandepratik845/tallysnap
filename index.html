@@ -229,7 +229,7 @@
   </a>
   <div class="header-right">
     <span class="free-badge">Free Plan</span>
-    <span class="header-tag">AI · GST Ready</span>
+    <span class="header-tag">PDF → Tally XML · AI Powered</span>
   </div>
 </header>
 
@@ -244,15 +244,15 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">✦ Invoice Scanner for Tally</div>
-  <h1>Turn bills into <em>Tally entries</em> in seconds</h1>
-  <p>Upload any invoice, purchase bill, or challan — AI reads every detail and exports a ready-to-import Tally XML. Bulk process an entire month in one go.</p>
+  <div class="hero-eyebrow">✦ PDF Invoice Scanner for Tally</div>
+  <h1>Upload PDFs, get <em>Tally entries</em> instantly</h1>
+  <p>Just upload your PDF invoices — the same ones you receive on WhatsApp or email. AI reads every detail and exports a ready-to-import Tally XML. No photo clicking, no manual typing.</p>
 
   <div class="usage-bar-wrap">
     <div class="usage-bar-fill" id="usage-bar" style="width:0%"></div>
   </div>
   <div class="usage-text" id="usage-text">
-    <strong id="bills-used">0</strong> of <strong>5</strong> free bills used today
+    <strong id="bills-used">0</strong> of <strong>5</strong> free PDFs processed today
   </div>
 </section>
 
@@ -260,8 +260,8 @@
 <div style="max-width:860px;margin:0 auto;padding:0 1.5rem;">
   <div class="upgrade-banner">
     <div>
-      <h3>Need more than 5 bills/day?</h3>
-      <p>Starter plan (₹499/mo) · Pro plan (₹999/mo) · Launching soon — join the waitlist!</p>
+      <h3>Need more than 5 PDFs/day?</h3>
+      <p>Starter plan — 50 PDFs/day (₹499/mo) · Pro — Unlimited (₹999/mo) · Launching soon!</p>
     </div>
     <button class="btn-white" onclick="document.getElementById('pricing-section').scrollIntoView({behavior:'smooth'})">See Plans →</button>
   </div>
@@ -282,23 +282,35 @@
     <div>
       <!-- UPLOAD ZONE -->
       <div class="upload-card" id="upload-zone" onclick="handleUploadClick()">
-        <div class="upload-icon">📂</div>
-        <h2>Drop your invoices here</h2>
-        <p>Click to browse, or drag &amp; drop multiple files at once</p>
+        <div class="upload-icon">📄</div>
+        <h2>Drop your PDF invoices here</h2>
+        <p>The same PDFs you receive on WhatsApp or email — just upload directly</p>
         <div class="upload-formats">
+          <span class="fmt-tag" style="background:var(--accent);color:#fff;border-color:var(--accent);">✓ PDF — Recommended</span>
           <span class="fmt-tag">JPG</span>
           <span class="fmt-tag">PNG</span>
-          <span class="fmt-tag">WEBP</span>
           <span class="fmt-tag">Multiple files OK</span>
           <span class="fmt-tag">5 bills/day free</span>
         </div>
+        <div style="margin-top:1.2rem;display:flex;flex-direction:column;gap:8px;max-width:500px;margin-left:auto;margin-right:auto;">
+          <div style="background:var(--success-light);border:1px solid rgba(26,122,74,0.2);border-radius:10px;padding:10px 16px;">
+            <p style="font-size:12px;color:var(--success);margin:0;line-height:1.6;">
+              ✓ <strong>Best way:</strong> Forward the invoice PDF from WhatsApp/Email → save to PC → upload here. Done!
+            </p>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;">
+            <p style="font-size:12px;color:var(--ink3);margin:0;line-height:1.6;">
+              📱 <strong>Have physical bills?</strong> Open your phone camera → scan the bill → it saves as PDF automatically on most phones. Then transfer and upload.
+            </p>
+          </div>
+        </div>
       </div>
-      <input type="file" id="file-input" accept="image/*" multiple style="display:none;" />
+      <input type="file" id="file-input" accept="application/pdf,image/*" multiple style="display:none;" />
 
       <!-- LIMIT WARNING -->
       <div class="limit-warning" id="limit-warning">
         <h3>Daily limit reached</h3>
-        <p>You've used all 5 free bills for today. Your limit resets at midnight. Upgrade to process more!</p>
+        <p>You've processed all 5 free PDFs for today. Your limit resets at midnight. Upgrade to process more!</p>
       </div>
 
       <!-- QUEUE SECTION -->
@@ -501,10 +513,10 @@
 
   function addFiles(newFiles) {
     const remaining = remainingBills();
-    const imgs = newFiles.filter(f => f.type.startsWith('image/')).slice(0, remaining);
-    if (!imgs.length) { showToast('No valid image files or limit reached'); return; }
-    if (newFiles.length > remaining) showToast(`Only ${remaining} bill(s) left today — added ${imgs.length}`);
-    files = [...files, ...imgs];
+    const valid = newFiles.filter(f => f.type.startsWith('image/') || f.type === 'application/pdf').slice(0, remaining);
+    if (!valid.length) { showToast('Please upload JPG, PNG, WEBP or PDF files'); return; }
+    if (newFiles.length > remaining) showToast(`Only ${remaining} bill(s) left today — added ${valid.length}`);
+    files = [...files, ...valid];
     results = files.map((f, i) => results[i] || { file: f, status: 'waiting', data: null });
     renderQueue();
     document.getElementById('queue-section').style.display = 'block';
@@ -521,13 +533,19 @@
       const r = results[i];
       const div = document.createElement('div');
       div.className = 'q-item';
-      const url = URL.createObjectURL(f);
+      const isPDF = f.type === 'application/pdf';
       const barColor = r.status === 'done' ? '#1a7a4a' : r.status === 'processing' ? '#1a4fd6' : r.status === 'error' ? '#c82828' : '#ccc';
       const barWidth = ['done','error'].includes(r.status) ? '100' : r.status === 'processing' ? '60' : '0';
       const badgeClass = r.status === 'waiting' ? 'b-wait' : r.status === 'processing' ? 'b-proc' : r.status === 'done' ? 'b-done' : 'b-err';
       const badgeText = r.status === 'waiting' ? 'Waiting' : r.status === 'processing' ? 'Reading…' : r.status === 'done' ? '✓ Done' : 'Error';
+      const thumbHTML = isPDF
+        ? `<div class="q-thumb" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#fff5f0;">
+            <span style="font-size:28px;">📄</span>
+            <span style="font-size:10px;font-weight:600;color:#e8500a;letter-spacing:0.05em;">PDF</span>
+           </div>`
+        : `<img class="q-thumb" src="${URL.createObjectURL(f)}" alt="${f.name}" />`;
       div.innerHTML = `
-        <img class="q-thumb" src="${url}" alt="${f.name}" />
+        ${thumbHTML}
         <div class="q-status-bar"><div class="q-status-fill" style="background:${barColor};width:${barWidth}%"></div></div>
         <div class="q-info">
           <div class="q-name">${f.name}</div>
@@ -765,3 +783,4 @@ ${vxml}
 </script>
 </body>
 </html>
+
