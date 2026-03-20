@@ -3,232 +3,247 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TallySnap — Invoice to Tally XML in Seconds</title>
-<meta name="description" content="Upload any invoice, purchase bill or challan and instantly get a Tally-ready XML file. Free, fast, AI-powered." />
+<title>TallySnap — PDF Invoice to Tally XML</title>
+<meta name="description" content="Upload PDF invoices and get a Tally-ready XML file instantly. Free, AI-powered, GST ready." />
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID once approved -->
 <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --ink: #0f1117; --ink2: #3a3d47; --ink3: #7c808c;
-    --surface: #f5f4ef; --paper: #fdfcf8;
-    --accent: #1a4fd6; --accent-light: #e8eefb;
-    --accent2: #e8500a;
-    --success: #1a7a4a; --success-light: #e6f4ec;
-    --warn: #b85c00; --warn-light: #fff3e6;
-    --border: rgba(15,17,23,0.10); --border-strong: rgba(15,17,23,0.18);
-    --radius: 12px; --radius-lg: 20px;
-    --shadow: 0 2px 12px rgba(15,17,23,0.08);
-    --shadow-lg: 0 8px 40px rgba(15,17,23,0.13);
-  }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Outfit', sans-serif; background: var(--surface); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0f1117; --ink2: #3a3d47; --ink3: #7c808c;
+  --surface: #f5f4ef; --paper: #fdfcf8;
+  --accent: #1a4fd6; --accent-light: #e8eefb;
+  --accent2: #e8500a;
+  --success: #1a7a4a; --success-light: #e6f4ec;
+  --warn: #b85c00; --warn-light: #fff3e6;
+  --border: rgba(15,17,23,0.09); --border-strong: rgba(15,17,23,0.16);
+  --radius: 12px; --radius-lg: 18px;
+  --shadow: 0 2px 12px rgba(15,17,23,0.07);
+  --shadow-lg: 0 8px 32px rgba(15,17,23,0.11);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Outfit', sans-serif; background: var(--surface); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.6; }
 
-  /* HEADER */
-  header { background: var(--paper); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; }
-  .logo { display: flex; align-items: center; gap: 10px; font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); text-decoration: none; }
-  .logo-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; }
-  .logo span { color: var(--accent2); font-style: italic; }
-  .header-right { display: flex; align-items: center; gap: 12px; }
-  .header-tag { font-size: 12px; font-weight: 500; background: var(--accent-light); color: var(--accent); padding: 4px 12px; border-radius: 99px; }
-  .free-badge { font-size: 12px; font-weight: 600; background: var(--success-light); color: var(--success); padding: 4px 12px; border-radius: 99px; }
+/* ── HEADER ── */
+header {
+  background: var(--paper); border-bottom: 1px solid var(--border);
+  padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+  height: 56px; position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 9px; font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); text-decoration: none; }
+.logo-icon { width: 30px; height: 30px; background: var(--accent); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; }
+.logo span { color: var(--accent2); font-style: italic; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.hbadge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; }
+.hbadge-green { background: var(--success-light); color: var(--success); }
+.hbadge-blue { background: var(--accent-light); color: var(--accent); }
 
-  /* AD BANNER TOP */
-  .ad-banner-top { background: var(--paper); border-bottom: 1px solid var(--border); padding: 10px 2rem; text-align: center; min-height: 70px; display: flex; align-items: center; justify-content: center; }
-  .ad-placeholder { background: var(--surface); border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 14px 40px; color: var(--ink3); font-size: 12px; width: 100%; max-width: 728px; }
+/* ── TOP AD ── */
+.ad-top { background: var(--paper); border-bottom: 1px solid var(--border); padding: 8px 2rem; text-align: center; }
+.ad-placeholder { background: var(--surface); border: 1.5px dashed var(--border-strong); border-radius: 8px; padding: 10px; color: var(--ink3); font-size: 11px; width: 100%; max-width: 728px; margin: 0 auto; min-height: 52px; display: flex; align-items: center; justify-content: center; }
 
-  /* HERO */
-  .hero { text-align: center; padding: 4rem 2rem 2.5rem; max-width: 680px; margin: 0 auto; }
-  .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 1.2rem; background: #fff3ee; padding: 5px 14px; border-radius: 99px; border: 1px solid rgba(232,80,10,0.15); }
-  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin-bottom: 1rem; }
-  .hero h1 em { color: var(--accent); font-style: italic; }
-  .hero p { font-size: 16px; color: var(--ink2); font-weight: 300; max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.7; }
+/* ── TWO COLUMN LAYOUT ── */
+.page-wrap { max-width: 1100px; margin: 0 auto; padding: 1.5rem; display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem; align-items: start; }
 
-  /* USAGE METER */
-  .usage-bar-wrap { max-width: 340px; margin: 0 auto 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
-  .usage-bar-fill { height: 8px; border-radius: 99px; background: var(--accent); transition: width 0.4s; }
-  .usage-text { font-size: 12px; color: var(--ink3); text-align: center; margin-bottom: 2rem; }
-  .usage-text strong { color: var(--ink); }
+/* ── LEFT COLUMN ── */
+.left-col { display: flex; flex-direction: column; gap: 1rem; }
 
-  /* UPGRADE BANNER */
-  .upgrade-banner { background: linear-gradient(135deg, #1a4fd6 0%, #0e35a0 100%); color: #fff; border-radius: var(--radius-lg); padding: 1.25rem 1.75rem; margin: 0 auto 2rem; max-width: 860px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  .upgrade-banner h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 2px; }
-  .upgrade-banner p { font-size: 13px; opacity: 0.85; }
-  .btn-white { background: #fff; color: var(--accent); border: none; padding: 9px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif; transition: opacity 0.15s; }
-  .btn-white:hover { opacity: 0.9; }
+/* ── COMPACT HERO ── */
+.compact-hero { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent2); margin-bottom: 8px; background: #fff3ee; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(232,80,10,0.15); }
+.compact-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin-bottom: 6px; }
+.compact-hero h1 em { color: var(--accent); font-style: italic; }
+.compact-hero p { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.65; max-width: 520px; }
 
-  /* STEPS */
-  .steps { display: flex; justify-content: center; gap: 0; padding: 0 2rem 2.5rem; max-width: 700px; margin: 0 auto; }
-  .step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; text-align: center; }
-  .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--paper); border: 1.5px solid var(--border-strong); font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; color: var(--ink3); }
-  .step.active .step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .step-label { font-size: 12px; font-weight: 500; color: var(--ink3); }
-  .step.active .step-label { color: var(--accent); }
-  .step-line { flex: 1; height: 1.5px; background: var(--border-strong); margin-top: 16px; }
+/* ── HOW IT WORKS ── */
+.flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items: center; background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; gap: 4px; }
+.flow-step { text-align: center; padding: 6px 4px; }
+.flow-icon { font-size: 22px; margin-bottom: 4px; }
+.flow-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.flow-sub { font-size: 11px; color: var(--ink3); line-height: 1.4; }
+.flow-arrow { color: var(--ink3); font-size: 16px; padding: 0 2px; }
+.flow-step.highlight .flow-title { color: var(--accent); }
+.flow-step.finish .flow-title { color: var(--success); }
 
-  /* MAIN */
-  .main { max-width: 860px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+/* ── UPLOAD ZONE ── */
+.upload-zone {
+  background: var(--paper); border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-lg); padding: 2rem 1.5rem;
+  text-align: center; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  position: relative; overflow: hidden;
+}
+.upload-zone::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 60% 40%, rgba(26,79,214,0.03) 0%, transparent 70%); pointer-events: none; }
+.upload-zone:hover { border-color: var(--accent); background: #f8faff; transform: translateY(-1px); }
+.upload-zone.dragging { border-color: var(--accent); background: var(--accent-light); }
+.upload-icon { width: 52px; height: 52px; background: var(--accent-light); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 24px; transition: transform 0.2s; }
+.upload-zone:hover .upload-icon { transform: scale(1.08); }
+.upload-zone h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-bottom: 4px; }
+.upload-zone p { color: var(--ink3); font-size: 13px; margin-bottom: 12px; }
+.fmt-tags { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+.fmt-tag { font-size: 11px; font-weight: 500; background: var(--surface); border: 1px solid var(--border); color: var(--ink3); padding: 2px 9px; border-radius: 99px; }
+.fmt-tag.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.upload-tips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; }
+.upload-tip { background: var(--surface); border-radius: 9px; padding: 8px 12px; font-size: 12px; color: var(--ink3); line-height: 1.5; border: 1px solid var(--border); }
+.upload-tip strong { color: var(--ink2); }
 
-  /* UPLOAD */
-  .upload-card { background: var(--paper); border: 1.5px dashed var(--border-strong); border-radius: var(--radius-lg); padding: 3.5rem 2rem; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.15s; position: relative; overflow: hidden; }
-  .upload-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 60% 40%, rgba(26,79,214,0.04) 0%, transparent 70%); pointer-events: none; }
-  .upload-card:hover { border-color: var(--accent); background: #f8faff; transform: translateY(-1px); }
-  .upload-card.dragging { border-color: var(--accent); background: var(--accent-light); }
-  .upload-card.limit-reached { border-color: #e24b4b; background: #fff5f5; cursor: not-allowed; }
-  .upload-icon { width: 64px; height: 64px; background: var(--accent-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 28px; transition: transform 0.2s; }
-  .upload-card:hover .upload-icon { transform: scale(1.08); }
-  .upload-card h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 6px; }
-  .upload-card p { color: var(--ink3); font-size: 14px; }
-  .upload-formats { margin-top: 1.2rem; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  .fmt-tag { font-size: 11px; font-weight: 500; background: var(--surface); border: 1px solid var(--border); color: var(--ink3); padding: 3px 10px; border-radius: 99px; }
+/* ── USAGE BAR ── */
+.usage-row { display: flex; align-items: center; gap: 10px; background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; }
+.usage-bar-wrap { flex: 1; background: var(--surface); border-radius: 99px; height: 6px; overflow: hidden; }
+.usage-bar-fill { height: 6px; border-radius: 99px; background: var(--accent); transition: width 0.4s; }
+.usage-label { font-size: 12px; color: var(--ink3); white-space: nowrap; }
+.usage-label strong { color: var(--ink); }
 
-  /* QUEUE */
-  #queue-section { display: none; margin-top: 1.5rem; }
-  .queue-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
-  .queue-title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; }
-  .queue-meta { font-size: 13px; color: var(--ink3); }
-  .queue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
-  .q-item { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; position: relative; transition: box-shadow 0.15s; }
-  .q-item:hover { box-shadow: var(--shadow); }
-  .q-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: var(--surface); }
-  .q-info { padding: 8px 10px; }
-  .q-name { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
-  .q-size { font-size: 11px; color: var(--ink3); }
-  .q-status-bar { height: 3px; background: var(--border); position: relative; overflow: hidden; }
-  .q-status-fill { position: absolute; inset-y: 0; left: 0; width: 0%; transition: width 0.4s; }
-  .q-badge { position: absolute; top: 8px; right: 8px; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
-  .b-wait { background: rgba(255,255,255,0.85); color: var(--ink3); }
-  .b-proc { background: rgba(26,79,214,0.85); color: #fff; }
-  .b-done { background: rgba(26,122,74,0.85); color: #fff; }
-  .b-err  { background: rgba(200,40,40,0.85); color: #fff; }
-  .q-remove { position: absolute; top: 8px; left: 8px; width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,0.45); border: none; color: #fff; font-size: 13px; cursor: pointer; display: none; align-items: center; justify-content: center; line-height: 1; }
-  .q-item:hover .q-remove { display: flex; }
+/* ── LIMIT WARNING ── */
+.limit-warning { background: #fff5f5; border: 1.5px solid rgba(226,75,74,0.3); border-radius: var(--radius); padding: 1rem 1.25rem; text-align: center; display: none; }
+.limit-warning h3 { font-family: 'DM Serif Display', serif; color: #a32d2d; margin-bottom: 4px; font-size: 1rem; }
+.limit-warning p { font-size: 13px; color: var(--ink2); }
 
-  /* PROGRESS */
-  .overall-progress { margin-bottom: 1.5rem; display: none; }
-  .op-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
-  .op-label span:first-child { font-weight: 500; }
-  .op-label span:last-child { color: var(--ink3); font-family: 'DM Mono', monospace; }
-  .op-bar-wrap { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
-  .op-bar { height: 8px; background: var(--accent); border-radius: 99px; width: 0%; transition: width 0.4s; }
+/* ── QUEUE ── */
+#queue-section { display: none; }
+.queue-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.queue-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+.queue-meta { font-size: 12px; color: var(--ink3); }
+.queue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+.q-item { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; position: relative; transition: box-shadow 0.15s; }
+.q-item:hover { box-shadow: var(--shadow); }
+.q-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: var(--surface); }
+.q-info { padding: 7px 9px; }
+.q-name { font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
+.q-size { font-size: 10px; color: var(--ink3); }
+.q-status-bar { height: 3px; background: var(--border); position: relative; overflow: hidden; }
+.q-status-fill { position: absolute; inset-y: 0; left: 0; width: 0%; transition: width 0.4s; }
+.q-badge { position: absolute; top: 6px; right: 6px; font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 99px; }
+.b-wait { background: rgba(255,255,255,0.85); color: var(--ink3); }
+.b-proc { background: rgba(26,79,214,0.85); color: #fff; }
+.b-done { background: rgba(26,122,74,0.85); color: #fff; }
+.b-err  { background: rgba(200,40,40,0.85); color: #fff; }
+.q-remove { position: absolute; top: 6px; left: 6px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.45); border: none; color: #fff; font-size: 12px; cursor: pointer; display: none; align-items: center; justify-content: center; line-height: 1; }
+.q-item:hover .q-remove { display: flex; }
 
-  /* BUTTONS */
-  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 22px; border-radius: var(--radius); border: 1.5px solid var(--border-strong); font-size: 14px; font-weight: 500; font-family: 'Outfit', sans-serif; cursor: pointer; background: var(--paper); color: var(--ink); transition: all 0.15s; text-decoration: none; }
-  .btn:hover { background: var(--surface); }
-  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn-primary:hover { background: #1440b0; }
-  .btn-primary:disabled { background: #a0b4e8; border-color: #a0b4e8; cursor: not-allowed; }
-  .btn-success { background: var(--success); color: #fff; border-color: var(--success); font-size: 15px; padding: 13px 28px; }
-  .btn-success:hover { background: #155a38; }
-  .btn-ghost { border-color: transparent; }
-  .btn-ghost:hover { background: var(--surface); border-color: var(--border); }
-  .spin { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spinning 0.65s linear infinite; display: inline-block; }
-  @keyframes spinning { to { transform: rotate(360deg); } }
+/* ── PROGRESS ── */
+.overall-progress { display: none; margin-bottom: 10px; }
+.op-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+.op-label span:first-child { font-weight: 500; }
+.op-label span:last-child { color: var(--ink3); font-family: 'DM Mono', monospace; }
+.op-bar-wrap { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.op-bar { height: 6px; background: var(--accent); border-radius: 99px; width: 0%; transition: width 0.4s; }
 
-  /* AD SIDEBAR */
-  .content-with-ad { display: grid; grid-template-columns: 1fr 160px; gap: 1.5rem; align-items: start; }
-  .ad-sidebar { position: sticky; top: 80px; }
-  .ad-sidebar-placeholder { background: var(--paper); border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 12px; text-align: center; color: var(--ink3); font-size: 11px; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+/* ── BUTTONS ── */
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: var(--radius); border: 1.5px solid var(--border-strong); font-size: 13px; font-weight: 500; font-family: 'Outfit', sans-serif; cursor: pointer; background: var(--paper); color: var(--ink); transition: all 0.15s; text-decoration: none; }
+.btn:hover { background: var(--surface); }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: #1440b0; }
+.btn-primary:disabled { background: #a0b4e8; border-color: #a0b4e8; cursor: not-allowed; }
+.btn-success { background: var(--success); color: #fff; border-color: var(--success); font-size: 14px; padding: 11px 24px; }
+.btn-success:hover { background: #155a38; }
+.btn-ghost { border-color: transparent; }
+.btn-ghost:hover { background: var(--surface); border-color: var(--border); }
+.spin { width: 13px; height: 13px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: sp 0.65s linear infinite; display: inline-block; }
+@keyframes sp { to { transform: rotate(360deg); } }
 
-  /* DOWNLOAD SECTION */
-  #download-section { display: none; margin-top: 2rem; }
-  .download-card { background: var(--paper); border: 1.5px solid rgba(26,122,74,0.25); border-radius: var(--radius-lg); padding: 2.5rem; text-align: center; position: relative; overflow: hidden; animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1); }
-  .download-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(26,122,74,0.05) 0%, transparent 60%); pointer-events: none; }
-  @keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-  .dl-icon { width: 72px; height: 72px; background: var(--success-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 32px; animation: bounceIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.1s both; }
-  @keyframes bounceIn { from { transform:scale(0.4); opacity:0; } to { transform:scale(1); opacity:1; } }
-  .download-card h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 6px; }
-  .download-card > p { color: var(--ink3); font-size: 14px; margin-bottom: 1.8rem; }
-  .summary-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 2rem; text-align: left; }
-  .stat-box { background: var(--surface); border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--border); }
-  .stat-val { font-size: 22px; font-weight: 600; color: var(--ink); font-family: 'DM Mono', monospace; }
-  .stat-lbl { font-size: 11px; color: var(--ink3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+/* ── DOWNLOAD ── */
+#download-section { display: none; }
+.download-card { background: var(--paper); border: 1.5px solid rgba(26,122,74,0.25); border-radius: var(--radius-lg); padding: 1.75rem; text-align: center; animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1); }
+@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.dl-icon { width: 56px; height: 56px; background: var(--success-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 26px; animation: bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.1s both; }
+@keyframes bounceIn { from { transform:scale(0.4); opacity:0; } to { transform:scale(1); opacity:1; } }
+.download-card h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: 4px; }
+.download-card > p { color: var(--ink3); font-size: 13px; margin-bottom: 1.25rem; }
+.summary-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 1.25rem; }
+.stat-box { background: var(--surface); border-radius: var(--radius); padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
+.stat-val { font-size: 18px; font-weight: 600; color: var(--ink); font-family: 'DM Mono', monospace; }
+.stat-lbl { font-size: 10px; color: var(--ink3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
 
-  /* AD between download and table */
-  .ad-middle { text-align: center; margin: 1.5rem 0; }
-  .ad-middle-placeholder { background: var(--paper); border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 14px 40px; color: var(--ink3); font-size: 12px; display: inline-block; width: 100%; max-width: 728px; min-height: 90px; display: flex; align-items: center; justify-content: center; }
+/* ── TABLE ── */
+.table-section { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.table-section-header { padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 13px; }
+.table-wrap { overflow-x: auto; }
+table.vouchers { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 600px; }
+table.vouchers th { background: var(--surface); padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink3); border-bottom: 1px solid var(--border); white-space: nowrap; }
+table.vouchers td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--ink); vertical-align: middle; }
+table.vouchers tr:last-child td { border-bottom: none; }
+table.vouchers tr:hover td { background: var(--surface); }
+.mono { font-family: 'DM Mono', monospace; font-size: 11px; }
+.tag { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 99px; }
+.tag-blue { background: var(--accent-light); color: var(--accent); }
+.tag-green { background: var(--success-light); color: var(--success); }
 
-  /* TABLE */
-  .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
-  table.vouchers { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
-  table.vouchers th { background: var(--surface); padding: 9px 12px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink3); border-bottom: 1.5px solid var(--border-strong); white-space: nowrap; }
-  table.vouchers td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--ink); vertical-align: middle; }
-  table.vouchers tr:last-child td { border-bottom: none; }
-  table.vouchers tr:hover td { background: var(--surface); }
-  .mono { font-family: 'DM Mono', monospace; font-size: 12px; }
-  .tag { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 99px; }
-  .tag-green { background: var(--success-light); color: var(--success); }
-  .tag-blue { background: var(--accent-light); color: var(--accent); }
+/* ── XML PREVIEW ── */
+.xml-block { background: #0f1117; color: #a8d8a8; font-family: 'DM Mono', monospace; font-size: 11px; line-height: 1.6; border-radius: var(--radius); padding: 1rem 1.25rem; overflow: auto; max-height: 200px; text-align: left; margin-top: 8px; }
+.xml-block .kw { color: #88aaff; }
+.xml-block .val { color: #a8d8a8; }
 
-  /* XML */
-  .xml-block { background: #0f1117; color: #a8d8a8; font-family: 'DM Mono', monospace; font-size: 11.5px; line-height: 1.65; border-radius: var(--radius); padding: 1.25rem 1.5rem; overflow: auto; max-height: 240px; text-align: left; margin-top: 1rem; }
-  .xml-block .kw { color: #88aaff; }
-  .xml-block .val { color: #a8d8a8; }
+/* ── RIGHT SIDEBAR ── */
+.right-col { display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 70px; }
 
-  /* HOW TO IMPORT */
-  .how-to { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.75rem; margin-top: 1.5rem; }
-  .how-to h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin-bottom: 1rem; }
-  .how-steps { display: flex; flex-direction: column; gap: 10px; }
-  .how-step { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; }
-  .how-step-num { min-width: 26px; height: 26px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
-  .how-step-text { color: var(--ink2); line-height: 1.55; }
-  .how-step-text strong { color: var(--ink); font-weight: 600; }
-  code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--surface); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; color: var(--accent); }
+/* ── UPGRADE CARD ── */
+.upgrade-card { background: linear-gradient(145deg, #1a4fd6 0%, #0e35a0 100%); color: #fff; border-radius: var(--radius-lg); padding: 1.25rem; }
+.upgrade-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-bottom: 6px; }
+.upgrade-card p { font-size: 12px; opacity: 0.85; margin-bottom: 14px; line-height: 1.55; }
+.plan-row { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; }
+.plan-row-name { font-size: 11px; font-weight: 600; opacity: 0.8; }
+.plan-row-detail { font-size: 13px; font-weight: 600; }
+.btn-white { background: #fff; color: var(--accent); border: none; padding: 9px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif; width: 100%; margin-top: 4px; transition: opacity 0.15s; }
+.btn-white:hover { opacity: 0.9; }
 
-  /* PRICING SECTION */
-  .pricing-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-  .pricing-section h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; text-align: center; margin-bottom: 0.5rem; }
-  .pricing-section > p { text-align: center; color: var(--ink3); font-size: 14px; margin-bottom: 2rem; }
-  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-  .price-card { background: var(--paper); border: 1.5px solid var(--border-strong); border-radius: var(--radius-lg); padding: 1.75rem; text-align: center; position: relative; transition: transform 0.15s, box-shadow 0.15s; }
-  .price-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-  .price-card.featured { border-color: var(--accent); }
-  .price-card.featured::before { content: 'Most Popular'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 14px; border-radius: 99px; }
-  .price-name { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink3); margin-bottom: 8px; }
-  .price-amount { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--ink); margin-bottom: 4px; }
-  .price-amount span { font-size: 14px; font-family: 'Outfit', sans-serif; font-weight: 400; color: var(--ink3); }
-  .price-limit { font-size: 13px; color: var(--ink2); margin-bottom: 1.25rem; }
-  .price-features { list-style: none; text-align: left; font-size: 13px; color: var(--ink2); display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
-  .price-features li::before { content: '✓ '; color: var(--success); font-weight: 600; }
-  .coming-soon-tag { background: var(--warn-light); color: var(--warn); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; display: inline-block; margin-top: 8px; }
+/* ── AD SIDEBAR ── */
+.ad-sidebar-card { background: var(--paper); border: 1.5px dashed var(--border-strong); border-radius: var(--radius-lg); min-height: 250px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem; color: var(--ink3); font-size: 11px; }
 
-  /* FOOTER */
-  footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--ink3); border-top: 1px solid var(--border); margin-top: 3rem; }
-  footer a { color: var(--ink3); text-decoration: none; }
-  footer a:hover { color: var(--ink); }
+/* ── HOW TO IMPORT ── */
+.how-to-card { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; }
+.how-to-card h3 { font-family: 'DM Serif Display', serif; font-size: 1rem; margin-bottom: 12px; }
+.how-step { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 12px; }
+.how-step:last-child { margin-bottom: 0; }
+.how-num { min-width: 22px; height: 22px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 1px; flex-shrink: 0; }
+.how-text { color: var(--ink2); line-height: 1.5; }
+.how-text strong { color: var(--ink); }
+code { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; color: var(--accent); }
 
-  /* TOAST */
-  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--ink); color: #fff; padding: 12px 20px; border-radius: var(--radius); font-size: 14px; opacity: 0; transform: translateY(12px); transition: all 0.25s; pointer-events: none; z-index: 999; max-width: 300px; }
-  .toast.show { opacity: 1; transform: translateY(0); }
+/* ── PRICING ── */
+.pricing-section { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.75rem; margin-top: 1rem; }
+.pricing-section h2 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; text-align: center; margin-bottom: 4px; }
+.pricing-section > p { text-align: center; color: var(--ink3); font-size: 13px; margin-bottom: 1.25rem; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.price-card { border: 1.5px solid var(--border-strong); border-radius: var(--radius); padding: 1.25rem; text-align: center; position: relative; transition: transform 0.15s, box-shadow 0.15s; }
+.price-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.price-card.featured { border-color: var(--accent); }
+.price-card.featured::before { content: 'Popular'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 12px; border-radius: 99px; }
+.price-name { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink3); margin-bottom: 6px; }
+.price-amount { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--ink); margin-bottom: 2px; }
+.price-amount span { font-size: 12px; font-family: 'Outfit', sans-serif; font-weight: 400; color: var(--ink3); }
+.price-limit { font-size: 12px; color: var(--ink2); margin-bottom: 1rem; }
+.price-features { list-style: none; text-align: left; font-size: 12px; color: var(--ink2); display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+.price-features li::before { content: '✓ '; color: var(--success); font-weight: 600; }
+.coming-tag { background: var(--warn-light); color: var(--warn); font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 99px; display: inline-block; }
 
-  /* LIMIT WARNING */
-  .limit-warning { background: #fff5f5; border: 1.5px solid rgba(226,75,74,0.3); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin-top: 1rem; display: none; }
-  .limit-warning h3 { font-family: 'DM Serif Display', serif; color: #a32d2d; margin-bottom: 6px; }
-  .limit-warning p { font-size: 14px; color: var(--ink2); }
+/* ── FOOTER ── */
+footer { text-align: center; padding: 1.5rem; font-size: 11px; color: var(--ink3); border-top: 1px solid var(--border); margin-top: 1.5rem; }
+footer a { color: var(--ink3); text-decoration: none; }
 
-  @media (max-width: 700px) {
-    .content-with-ad { grid-template-columns: 1fr; }
-    .ad-sidebar { display: none; }
-    .hero { padding: 2.5rem 1.25rem 1.5rem; }
-    .main { padding: 0 1rem 2rem; }
-    .download-card { padding: 1.5rem; }
-    .pricing-grid { grid-template-columns: 1fr; }
-    .upgrade-banner { flex-direction: column; text-align: center; }
-    .how-desktop { display: none !important; }
-    .how-mobile { display: flex !important; }
-  }
-  @media (min-width: 701px) {
-    .how-desktop { display: grid !important; }
-    .how-mobile { display: none !important; }
-  }
-  .how-mobile { flex-direction: column; gap: 0; }
-  .how-m-step { display: flex; align-items: center; gap: 14px; background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
-  .how-m-icon { width: 40px; height: 40px; background: var(--accent-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-  .how-m-title { font-size: 14px; font-weight: 500; color: var(--ink); }
-  .how-m-sub { font-size: 12px; color: var(--ink3); margin-top: 2px; }
-  .how-m-arrow { text-align: center; font-size: 18px; color: var(--ink3); padding: 4px 0; }
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: var(--radius); font-size: 13px; opacity: 0; transform: translateY(10px); transition: all 0.25s; pointer-events: none; z-index: 999; }
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .page-wrap { grid-template-columns: 1fr; padding: 1rem; }
+  .right-col { position: static; }
+  .flow { display: none; }
+  .flow-mobile { display: flex !important; }
+  .summary-stats { grid-template-columns: repeat(2,1fr); }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .upload-tips { grid-template-columns: 1fr; }
+}
+@media (min-width: 801px) {
+  .flow-mobile { display: none !important; }
+}
+.flow-mobile { flex-direction: row; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+.flow-mobile-step { min-width: 110px; background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; text-align: center; flex-shrink: 0; }
+.flow-mobile-icon { font-size: 20px; margin-bottom: 4px; }
+.flow-mobile-title { font-size: 11px; font-weight: 600; color: var(--ink); }
 </style>
 </head>
 <body>
@@ -240,516 +255,413 @@
     Tally<span>Snap</span>
   </a>
   <div class="header-right">
-    <span class="free-badge">Free Plan</span>
-    <span class="header-tag">PDF → Tally XML · AI Powered</span>
+    <span class="hbadge hbadge-green">Free Plan</span>
+    <span class="hbadge hbadge-blue">PDF → Tally XML</span>
   </div>
 </header>
 
-<!-- TOP AD BANNER -->
-<div class="ad-banner-top">
-  <!-- Replace this div with your AdSense ad unit code once approved -->
-  <div class="ad-placeholder">
-    📢 Advertisement — Google AdSense 728×90 (Leaderboard)<br>
-    <small>Replace this with your AdSense code after approval</small>
-  </div>
+<!-- TOP AD -->
+<div class="ad-top">
+  <div class="ad-placeholder">📢 Google AdSense 728×90 — Replace with your AdSense code after approval</div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-eyebrow">✦ PDF Invoice Scanner for Tally</div>
-  <h1>Upload PDFs, get <em>Tally entries</em> instantly</h1>
-  <p>Just upload your PDF invoices — the same ones you receive on WhatsApp or email. AI reads every detail and exports a ready-to-import Tally XML. No photo clicking, no manual typing.</p>
+<!-- PAGE LAYOUT -->
+<div class="page-wrap">
 
-  <div class="usage-bar-wrap">
-    <div class="usage-bar-fill" id="usage-bar" style="width:0%"></div>
+  <!-- LEFT COLUMN -->
+  <div class="left-col">
+
+    <!-- COMPACT HERO -->
+    <div class="compact-hero">
+      <div class="hero-eyebrow">✦ AI-Powered · GST Ready</div>
+      <h1>Upload PDFs, get <em>Tally entries</em> instantly</h1>
+      <p>The same invoices you receive on WhatsApp or email — upload directly, no photo clicking, no manual typing. AI reads everything and exports a ready-to-import Tally XML.</p>
+    </div>
+
+    <!-- HOW IT WORKS FLOW — DESKTOP -->
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">📱</div>
+        <div class="flow-title">Receive PDF</div>
+        <div class="flow-sub">WhatsApp, email or scanned bill</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step highlight">
+        <div class="flow-icon">⬆</div>
+        <div class="flow-title">Upload here</div>
+        <div class="flow-sub">Up to 50 PDFs at once</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step highlight" style="position:relative;">
+        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap;">AI Magic ✦</div>
+        <div class="flow-icon">🤖</div>
+        <div class="flow-title">AI extracts data</div>
+        <div class="flow-sub">Party, GSTIN, items, HSN, GST</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step finish">
+        <div class="flow-icon">✅</div>
+        <div class="flow-title">Import to Tally</div>
+        <div class="flow-sub">Download XML → one click import</div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS — MOBILE -->
+    <div class="flow-mobile">
+      <div class="flow-mobile-step"><div class="flow-mobile-icon">📱</div><div class="flow-mobile-title">Receive PDF</div></div>
+      <div style="display:flex;align-items:center;color:var(--ink3);">→</div>
+      <div class="flow-mobile-step"><div class="flow-mobile-icon">⬆</div><div class="flow-mobile-title">Upload</div></div>
+      <div style="display:flex;align-items:center;color:var(--ink3);">→</div>
+      <div class="flow-mobile-step"><div class="flow-mobile-icon">🤖</div><div class="flow-mobile-title">AI reads</div></div>
+      <div style="display:flex;align-items:center;color:var(--ink3);">→</div>
+      <div class="flow-mobile-step"><div class="flow-mobile-icon">✅</div><div class="flow-mobile-title">Import Tally</div></div>
+    </div>
+
+    <!-- USAGE BAR -->
+    <div class="usage-row">
+      <div class="usage-bar-wrap">
+        <div class="usage-bar-fill" id="usage-bar" style="width:0%"></div>
+      </div>
+      <div class="usage-label"><strong id="bills-used">0</strong> of <strong>5</strong> free PDFs used today</div>
+    </div>
+
+    <!-- UPLOAD ZONE -->
+    <div class="upload-zone" id="upload-zone" onclick="handleUploadClick()">
+      <div class="upload-icon">📄</div>
+      <h2>Drop your PDF invoices here</h2>
+      <p>Click to browse or drag &amp; drop — same PDFs from WhatsApp or email</p>
+      <div class="fmt-tags">
+        <span class="fmt-tag primary">✓ PDF — Best</span>
+        <span class="fmt-tag">JPG</span>
+        <span class="fmt-tag">PNG</span>
+        <span class="fmt-tag">Up to 50 files</span>
+      </div>
+      <div class="upload-tips">
+        <div class="upload-tip">✓ <strong>Digital PDFs</strong> from Tally, Zoho, or email work perfectly</div>
+        <div class="upload-tip">📱 <strong>Physical bills?</strong> Scan with phone camera → saves as PDF → upload</div>
+      </div>
+    </div>
+    <input type="file" id="file-input" accept="application/pdf,image/*" multiple style="display:none;" />
+
+    <!-- LIMIT WARNING -->
+    <div class="limit-warning" id="limit-warning">
+      <h3>Daily limit reached</h3>
+      <p>You've used all 5 free PDFs today. Limit resets at midnight. Upgrade for more!</p>
+    </div>
+
+    <!-- QUEUE -->
+    <div id="queue-section">
+      <div class="queue-header">
+        <div>
+          <span class="queue-title">Uploaded bills</span>
+          <span class="queue-meta" id="queue-meta" style="margin-left:8px;"></span>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" onclick="clearAll()">✕ Clear</button>
+          <button class="btn" onclick="handleUploadClick()">+ Add more</button>
+          <button class="btn btn-primary" id="process-btn" onclick="startProcessing()">⚡ Process all</button>
+        </div>
+      </div>
+      <div class="overall-progress" id="overall-progress">
+        <div class="op-label">
+          <span id="progress-label">Extracting...</span>
+          <span id="progress-count">0 / 0</span>
+        </div>
+        <div class="op-bar-wrap"><div class="op-bar" id="op-bar"></div></div>
+      </div>
+      <div class="queue-grid" id="queue-grid"></div>
+    </div>
+
+    <!-- DOWNLOAD -->
+    <div id="download-section">
+      <div class="download-card">
+        <div class="dl-icon">✓</div>
+        <h2>Your Tally XML is ready!</h2>
+        <p id="dl-subtitle">Vouchers extracted and packaged into one importable file.</p>
+        <div class="summary-stats" id="summary-stats"></div>
+        <div class="btn-row" style="justify-content:center;margin-bottom:1rem;">
+          <button class="btn btn-success" onclick="downloadXML()">⬇ Download tally_import.xml</button>
+          <button class="btn" onclick="copyXML()">Copy XML</button>
+          <button class="btn btn-ghost" onclick="clearAll()">Start over</button>
+        </div>
+        <details>
+          <summary style="cursor:pointer;font-size:12px;color:var(--ink3);font-weight:500;outline:none;">Preview XML</summary>
+          <div class="xml-block" id="xml-preview"></div>
+        </details>
+      </div>
+
+      <!-- VOUCHER TABLE -->
+      <div class="table-section" style="margin-top:1rem;">
+        <div class="table-section-header">Extracted vouchers</div>
+        <div class="table-wrap">
+          <table class="vouchers">
+            <thead><tr><th>#</th><th>Date</th><th>Voucher no.</th><th>Party</th><th>GSTIN</th><th>Items</th><th>Subtotal</th><th>GST</th><th>Total</th><th>Type</th></tr></thead>
+            <tbody id="vouchers-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- AD MIDDLE (shown after results) -->
+    <div id="ad-middle" style="display:none;text-align:center;margin-top:1rem;">
+      <div class="ad-placeholder">📢 Google AdSense 728×90 — Replace with your AdSense code</div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="pricing-section" id="pricing-section">
+      <h2>Simple pricing</h2>
+      <p>Start free. Upgrade when you need more.</p>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-name">Free</div>
+          <div class="price-amount">₹0 <span>/ mo</span></div>
+          <div class="price-limit">5 PDFs per day</div>
+          <ul class="price-features">
+            <li>Tally XML export</li>
+            <li>GST extraction</li>
+            <li>All formats</li>
+            <li>Ad-supported</li>
+          </ul>
+          <span style="font-size:12px;color:var(--success);font-weight:600;">✓ Current plan</span>
+        </div>
+        <div class="price-card featured">
+          <div class="price-name">Starter</div>
+          <div class="price-amount">₹499 <span>/ mo</span></div>
+          <div class="price-limit">50 PDFs per day</div>
+          <ul class="price-features">
+            <li>Everything in Free</li>
+            <li>No ads</li>
+            <li>Priority processing</li>
+            <li>Email support</li>
+          </ul>
+          <span class="coming-tag">Coming Soon</span>
+        </div>
+        <div class="price-card">
+          <div class="price-name">Pro</div>
+          <div class="price-amount">₹999 <span>/ mo</span></div>
+          <div class="price-limit">Unlimited PDFs</div>
+          <ul class="price-features">
+            <li>Everything in Starter</li>
+            <li>Bulk processing</li>
+            <li>API access</li>
+            <li>Priority support</li>
+          </ul>
+          <span class="coming-tag">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div class="usage-text" id="usage-text">
-    <strong id="bills-used">0</strong> of <strong>5</strong> free PDFs processed today
-  </div>
-</section>
 
-<!-- UPGRADE BANNER -->
-<div style="max-width:860px;margin:0 auto;padding:0 1.5rem;">
-  <div class="upgrade-banner">
-    <div>
-      <h3>Need more than 5 PDFs/day?</h3>
-      <p>Starter plan — 50 PDFs/day (₹499/mo) · Pro — Unlimited (₹999/mo) · Launching soon!</p>
-    </div>
-    <button class="btn-white" onclick="document.getElementById('pricing-section').scrollIntoView({behavior:'smooth'})">See Plans →</button>
-  </div>
-</div>
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-col">
 
-<!-- HOW IT WORKS FLOW -->
-<div style="max-width:860px;margin:0 auto 2rem;padding:0 1.5rem;">
-  <p style="text-align:center;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.5rem;">How it works</p>
-
-  <div class="how-desktop" style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:0;">
-
-    <!-- STEP 1 -->
-    <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1rem;text-align:center;position:relative;">
-      <div style="width:48px;height:48px;background:#fff3ee;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">📱</div>
-      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2);margin-bottom:4px;">Step 1</div>
-      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;">Receive invoice</div>
-      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">PDF on WhatsApp, email, or scanned bill</div>
-    </div>
-
-    <!-- ARROW -->
-    <div style="display:flex;flex-direction:column;align-items:center;padding:0 8px;">
-      <div style="width:32px;height:2px;background:var(--border-strong);position:relative;">
-        <div style="position:absolute;right:-5px;top:-4px;width:0;height:0;border-left:8px solid var(--border-strong);border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>
+    <!-- UPGRADE CARD -->
+    <div class="upgrade-card">
+      <h3>Need more PDFs/day?</h3>
+      <p>Upgrade for higher limits, no ads, and priority processing.</p>
+      <div class="plan-row">
+        <div class="plan-row-name">Starter</div>
+        <div class="plan-row-detail">₹499/mo · 50 PDFs/day</div>
       </div>
-    </div>
-
-    <!-- STEP 2 -->
-    <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1rem;text-align:center;">
-      <div style="width:48px;height:48px;background:var(--accent-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">⬆</div>
-      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);margin-bottom:4px;">Step 2</div>
-      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;">Upload to TallySnap</div>
-      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Drag &amp; drop up to 50 PDFs at once</div>
-    </div>
-
-    <!-- ARROW -->
-    <div style="display:flex;flex-direction:column;align-items:center;padding:0 8px;">
-      <div style="width:32px;height:2px;background:var(--border-strong);position:relative;">
-        <div style="position:absolute;right:-5px;top:-4px;width:0;height:0;border-left:8px solid var(--border-strong);border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>
+      <div class="plan-row">
+        <div class="plan-row-name">Pro</div>
+        <div class="plan-row-detail">₹999/mo · Unlimited</div>
       </div>
-    </div>
-
-    <!-- STEP 3 -->
-    <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1rem;text-align:center;position:relative;">
-      <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:10px;font-weight:600;padding:2px 10px;border-radius:99px;white-space:nowrap;">AI Magic ✦</div>
-      <div style="width:48px;height:48px;background:#f0f4ff;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">🤖</div>
-      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);margin-bottom:4px;">Step 3</div>
-      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;">AI reads everything</div>
-      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Party name, GSTIN, items, HSN, GST — all extracted</div>
-    </div>
-
-    <!-- ARROW -->
-    <div style="display:flex;flex-direction:column;align-items:center;padding:0 8px;">
-      <div style="width:32px;height:2px;background:var(--border-strong);position:relative;">
-        <div style="position:absolute;right:-5px;top:-4px;width:0;height:0;border-left:8px solid var(--border-strong);border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>
-      </div>
-    </div>
-
-    <!-- STEP 4 -->
-    <div style="background:var(--paper);border:1.5px solid rgba(26,122,74,0.3);border-radius:var(--radius-lg);padding:1.25rem 1rem;text-align:center;">
-      <div style="width:48px;height:48px;background:var(--success-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">✅</div>
-      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--success);margin-bottom:4px;">Step 4</div>
-      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;">Import into Tally</div>
-      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Download XML → import in Tally Prime in one click</div>
-    </div>
-
-  </div>
-
-  <!-- MOBILE VERSION (visible only on small screens) -->
-  <div class="how-mobile">
-    <div class="how-m-step"><div class="how-m-icon">📱</div><div><div class="how-m-title">Receive invoice</div><div class="how-m-sub">PDF on WhatsApp, email, or scanned bill</div></div></div>
-    <div class="how-m-arrow">↓</div>
-    <div class="how-m-step"><div class="how-m-icon">⬆</div><div><div class="how-m-title">Upload to TallySnap</div><div class="how-m-sub">Drag &amp; drop up to 50 PDFs at once</div></div></div>
-    <div class="how-m-arrow">↓</div>
-    <div class="how-m-step"><div class="how-m-icon">🤖</div><div><div class="how-m-title">AI reads everything</div><div class="how-m-sub">Party, GSTIN, items, HSN, GST — all extracted</div></div></div>
-    <div class="how-m-arrow">↓</div>
-    <div class="how-m-step" style="border-color:rgba(26,122,74,0.3);"><div class="how-m-icon" style="background:var(--success-light);">✅</div><div><div class="how-m-title">Import into Tally</div><div class="how-m-sub">Download XML → import in Tally Prime</div></div></div>
-  </div>
-
-</div>
-
-<!-- PROGRESS STEPS (hidden, used by JS) -->
-<div id="steps-row" style="display:none;">
-  <div class="step active" id="step1"></div>
-  <div class="step" id="step2"></div>
-  <div class="step" id="step3"></div>
-</div>
-
-<!-- MAIN -->
-<main class="main">
-  <div class="content-with-ad">
-    <div>
-      <!-- UPLOAD ZONE -->
-      <div class="upload-card" id="upload-zone" onclick="handleUploadClick()">
-        <div class="upload-icon">📄</div>
-        <h2>Drop your PDF invoices here</h2>
-        <p>The same PDFs you receive on WhatsApp or email — just upload directly</p>
-        <div class="upload-formats">
-          <span class="fmt-tag" style="background:var(--accent);color:#fff;border-color:var(--accent);">✓ PDF — Recommended</span>
-          <span class="fmt-tag">JPG</span>
-          <span class="fmt-tag">PNG</span>
-          <span class="fmt-tag">Multiple files OK</span>
-          <span class="fmt-tag">5 bills/day free</span>
-        </div>
-        <div style="margin-top:1.2rem;display:flex;flex-direction:column;gap:8px;max-width:500px;margin-left:auto;margin-right:auto;">
-          <div style="background:var(--success-light);border:1px solid rgba(26,122,74,0.2);border-radius:10px;padding:10px 16px;">
-            <p style="font-size:12px;color:var(--success);margin:0;line-height:1.6;">
-              ✓ <strong>Best way:</strong> Forward the invoice PDF from WhatsApp/Email → save to PC → upload here. Done!
-            </p>
-          </div>
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;">
-            <p style="font-size:12px;color:var(--ink3);margin:0;line-height:1.6;">
-              📱 <strong>Have physical bills?</strong> Open your phone camera → scan the bill → it saves as PDF automatically on most phones. Then transfer and upload.
-            </p>
-          </div>
-        </div>
-      </div>
-      <input type="file" id="file-input" accept="application/pdf,image/*" multiple style="display:none;" />
-
-      <!-- LIMIT WARNING -->
-      <div class="limit-warning" id="limit-warning">
-        <h3>Daily limit reached</h3>
-        <p>You've processed all 5 free PDFs for today. Your limit resets at midnight. Upgrade to process more!</p>
-      </div>
-
-      <!-- QUEUE SECTION -->
-      <div id="queue-section">
-        <div class="queue-header" style="margin-top:1.75rem;">
-          <div>
-            <div class="queue-title">Uploaded bills</div>
-            <div class="queue-meta" id="queue-meta">0 files ready</div>
-          </div>
-          <div class="btn-row">
-            <button class="btn btn-ghost" onclick="clearAll()">✕ Clear all</button>
-            <button class="btn" onclick="handleUploadClick()">+ Add more</button>
-            <button class="btn btn-primary" id="process-btn" onclick="startProcessing()">
-              ⚡ Process all bills
-            </button>
-          </div>
-        </div>
-        <div class="overall-progress" id="overall-progress">
-          <div class="op-label">
-            <span id="progress-label">Extracting invoice data...</span>
-            <span id="progress-count">0 / 0</span>
-          </div>
-          <div class="op-bar-wrap"><div class="op-bar" id="op-bar"></div></div>
-        </div>
-        <div class="queue-grid" id="queue-grid"></div>
-      </div>
-
-      <!-- DOWNLOAD SECTION -->
-      <div id="download-section">
-        <div class="download-card">
-          <div class="dl-icon">✓</div>
-          <h2>Your Tally XML is ready!</h2>
-          <p id="dl-subtitle">All vouchers extracted and packaged into one importable file.</p>
-          <div class="summary-stats" id="summary-stats"></div>
-          <div class="btn-row" style="justify-content:center; margin-bottom:1.5rem;">
-            <button class="btn btn-success" onclick="downloadXML()">⬇ Download tally_import.xml</button>
-            <button class="btn" onclick="copyXML()">Copy XML</button>
-            <button class="btn btn-ghost" onclick="clearAll()">Start over</button>
-          </div>
-          <details>
-            <summary style="cursor:pointer;font-size:13px;color:var(--ink3);font-weight:500;outline:none;">Preview XML</summary>
-            <div class="xml-block" id="xml-preview"></div>
-          </details>
-        </div>
-
-        <!-- AD IN MIDDLE -->
-        <div class="ad-middle">
-          <div class="ad-middle-placeholder">
-            📢 Advertisement — Google AdSense 728×90<br>
-            <small>Replace with AdSense code after approval</small>
-          </div>
-        </div>
-
-        <div style="margin-top:1.5rem;">
-          <h3 style="font-family:'DM Serif Display',serif;font-size:1.15rem;margin-bottom:10px;">Extracted vouchers</h3>
-          <div class="table-wrap">
-            <table class="vouchers">
-              <thead>
-                <tr><th>#</th><th>Date</th><th>Voucher no.</th><th>Party name</th><th>GSTIN</th><th>Items</th><th>Subtotal</th><th>GST</th><th>Grand total</th><th>Type</th></tr>
-              </thead>
-              <tbody id="vouchers-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="how-to">
-          <h3>How to import into Tally</h3>
-          <div class="how-steps">
-            <div class="how-step"><div class="how-step-num">1</div><div class="how-step-text">Open <strong>Tally Prime</strong> and ensure your company is loaded.</div></div>
-            <div class="how-step"><div class="how-step-num">2</div><div class="how-step-text">Go to <strong>Gateway of Tally</strong> → <code>Import</code> → <code>Data</code></div></div>
-            <div class="how-step"><div class="how-step-num">3</div><div class="how-step-text">Select <strong>Vouchers</strong> as the import type.</div></div>
-            <div class="how-step"><div class="how-step-num">4</div><div class="how-step-text">Browse and select the downloaded <code>tally_import.xml</code> file.</div></div>
-            <div class="how-step"><div class="how-step-num">5</div><div class="how-step-text">Click <strong>Import</strong>. Ensure ledgers like <code>Purchase Account</code>, <code>CGST</code>, <code>SGST</code>, <code>IGST</code> exist in your company.</div></div>
-          </div>
-        </div>
-      </div>
+      <button class="btn-white" onclick="document.getElementById('pricing-section').scrollIntoView({behavior:'smooth'})">See Plans →</button>
     </div>
 
     <!-- SIDEBAR AD -->
-    <div class="ad-sidebar">
-      <div class="ad-sidebar-placeholder">
-        📢 Ad<br>160×320<br><small>AdSense sidebar</small>
-      </div>
+    <div class="ad-sidebar-card">
+      📢 AdSense<br>300×250<br><small>Replace with your ad code</small>
     </div>
-  </div>
 
-  <!-- PRICING SECTION -->
-  <div class="pricing-section" id="pricing-section">
-    <h2>Simple, honest pricing</h2>
-    <p>Start free. Upgrade when you need more.</p>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-name">Free</div>
-        <div class="price-amount">₹0 <span>/ month</span></div>
-        <div class="price-limit">5 bills per day</div>
-        <ul class="price-features">
-          <li>Tally XML export</li>
-          <li>GST extraction</li>
-          <li>All bill formats</li>
-          <li>Ad-supported</li>
-        </ul>
-        <span style="font-size:13px;color:var(--success);font-weight:600;">✓ You're on this plan</span>
-      </div>
-      <div class="price-card featured">
-        <div class="price-name">Starter</div>
-        <div class="price-amount">₹499 <span>/ month</span></div>
-        <div class="price-limit">50 bills per day</div>
-        <ul class="price-features">
-          <li>Everything in Free</li>
-          <li>No ads</li>
-          <li>Priority processing</li>
-          <li>Email support</li>
-        </ul>
-        <div><span class="coming-soon-tag">Coming Soon</span></div>
-      </div>
-      <div class="price-card">
-        <div class="price-name">Pro</div>
-        <div class="price-amount">₹999 <span>/ month</span></div>
-        <div class="price-limit">Unlimited bills</div>
-        <ul class="price-features">
-          <li>Everything in Starter</li>
-          <li>Bulk processing</li>
-          <li>API access</li>
-          <li>Priority support</li>
-        </ul>
-        <div><span class="coming-soon-tag">Coming Soon</span></div>
-      </div>
+    <!-- HOW TO IMPORT -->
+    <div class="how-to-card">
+      <h3>How to import into Tally</h3>
+      <div class="how-step"><div class="how-num">1</div><div class="how-text">Open <strong>Tally Prime</strong> with your company loaded.</div></div>
+      <div class="how-step"><div class="how-num">2</div><div class="how-text">Go to <strong>Gateway of Tally</strong> → <code>Import</code> → <code>Data</code></div></div>
+      <div class="how-step"><div class="how-num">3</div><div class="how-text">Select <strong>Vouchers</strong> as import type.</div></div>
+      <div class="how-step"><div class="how-num">4</div><div class="how-text">Browse and select <code>tally_import.xml</code></div></div>
+      <div class="how-step"><div class="how-num">5</div><div class="how-text">Click <strong>Import</strong>. Ensure <code>CGST</code>, <code>SGST</code>, <code>IGST</code> ledgers exist.</div></div>
     </div>
+
+    <!-- SECOND SIDEBAR AD -->
+    <div class="ad-sidebar-card">
+      📢 AdSense<br>300×250<br><small>Replace with your ad code</small>
+    </div>
+
   </div>
-</main>
+</div>
 
 <footer>
-  <p style="margin-bottom:6px;">© 2025 TallySnap · AI-powered invoice extraction for India</p>
-  <p><a href="#">Privacy Policy</a> · <a href="#">Terms of Use</a> · <a href="#">Contact</a> · Not affiliated with Tally Solutions Pvt. Ltd.</p>
+  © 2025 TallySnap · AI invoice extraction for India ·
+  <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Contact</a> ·
+  Not affiliated with Tally Solutions Pvt. Ltd.
 </footer>
 
 <div class="toast" id="toast"></div>
 
+<!-- HIDDEN STEP TRACKERS FOR JS -->
+<div style="display:none;">
+  <div id="step1"></div><div id="step2"></div><div id="step3"></div>
+</div>
+
 <script>
-  // ── CONSTANTS ──
-  const FREE_LIMIT = 5;
-  const STORAGE_KEY = 'tallysnap_usage';
+const FREE_LIMIT = 5;
+const STORAGE_KEY = 'tallysnap_usage';
 
-  // ── USAGE TRACKING ──
-  function getUsage() {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) return { date: today(), count: 0 };
-      const parsed = JSON.parse(stored);
-      if (parsed.date !== today()) return { date: today(), count: 0 };
-      return parsed;
-    } catch { return { date: today(), count: 0 }; }
-  }
+function getUsage() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (!s) return { date: today(), count: 0 };
+    const p = JSON.parse(s);
+    if (p.date !== today()) return { date: today(), count: 0 };
+    return p;
+  } catch { return { date: today(), count: 0 }; }
+}
+function saveUsage(count) { localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today(), count })); }
+function today() { return new Date().toISOString().slice(0, 10); }
+function remainingBills() { return Math.max(0, FREE_LIMIT - getUsage().count); }
+function updateUsageUI() {
+  const used = getUsage().count;
+  const pct = Math.min(100, (used / FREE_LIMIT) * 100);
+  document.getElementById('usage-bar').style.width = pct + '%';
+  document.getElementById('usage-bar').style.background = pct >= 100 ? '#e24b4a' : pct >= 80 ? '#e8500a' : '#1a4fd6';
+  document.getElementById('bills-used').textContent = used;
+}
 
-  function saveUsage(count) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today(), count }));
-  }
+let files = [], results = [], isProcessing = false, fullXML = '';
 
-  function today() {
-    return new Date().toISOString().slice(0, 10);
-  }
+function handleUploadClick() {
+  if (remainingBills() <= 0) { document.getElementById('limit-warning').style.display = 'block'; showToast('Daily limit reached!'); return; }
+  document.getElementById('file-input').click();
+}
 
-  function remainingBills() {
-    return Math.max(0, FREE_LIMIT - getUsage().count);
-  }
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e => { e.preventDefault(); if (remainingBills() > 0) zone.classList.add('dragging'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragging'); if (remainingBills() <= 0) { showToast('Daily limit reached!'); return; } addFiles(Array.from(e.dataTransfer.files)); });
+document.getElementById('file-input').addEventListener('change', e => addFiles(Array.from(e.target.files)));
 
-  function updateUsageUI() {
-    const used = getUsage().count;
-    const pct = Math.min(100, (used / FREE_LIMIT) * 100);
-    document.getElementById('usage-bar').style.width = pct + '%';
-    document.getElementById('usage-bar').style.background = pct >= 100 ? '#e24b4a' : pct >= 80 ? '#e8500a' : '#1a4fd6';
-    document.getElementById('bills-used').textContent = used;
-  }
+function addFiles(newFiles) {
+  const remaining = remainingBills();
+  const valid = newFiles.filter(f => f.type.startsWith('image/') || f.type === 'application/pdf').slice(0, remaining);
+  if (!valid.length) { showToast('Please upload PDF, JPG, or PNG files'); return; }
+  if (newFiles.length > remaining) showToast(`Only ${remaining} left today — added ${valid.length}`);
+  files = [...files, ...valid];
+  results = files.map((f, i) => results[i] || { file: f, status: 'waiting', data: null });
+  renderQueue();
+  document.getElementById('queue-section').style.display = 'block';
+  document.getElementById('download-section').style.display = 'none';
+  document.getElementById('ad-middle').style.display = 'none';
+  document.getElementById('limit-warning').style.display = 'none';
+}
 
-  // ── STATE ──
-  let files = [];
-  let results = [];
-  let isProcessing = false;
-  let fullXML = '';
-
-  // ── UPLOAD HANDLING ──
-  function handleUploadClick() {
-    if (remainingBills() <= 0) {
-      document.getElementById('limit-warning').style.display = 'block';
-      showToast('Daily limit reached. Resets at midnight!');
-      return;
-    }
-    document.getElementById('file-input').click();
-  }
-
-  const zone = document.getElementById('upload-zone');
-  zone.addEventListener('dragover', e => { e.preventDefault(); if (remainingBills() > 0) zone.classList.add('dragging'); });
-  zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.classList.remove('dragging');
-    if (remainingBills() <= 0) { showToast('Daily limit reached!'); return; }
-    addFiles(Array.from(e.dataTransfer.files));
+function renderQueue() {
+  const grid = document.getElementById('queue-grid');
+  grid.innerHTML = '';
+  document.getElementById('queue-meta').textContent = files.length + ' file' + (files.length !== 1 ? 's' : '') + ' ready';
+  files.forEach((f, i) => {
+    const r = results[i];
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    const isPDF = f.type === 'application/pdf';
+    const barColor = r.status === 'done' ? '#1a7a4a' : r.status === 'processing' ? '#1a4fd6' : r.status === 'error' ? '#c82828' : '#ccc';
+    const barWidth = ['done','error'].includes(r.status) ? '100' : r.status === 'processing' ? '60' : '0';
+    const badgeClass = r.status === 'waiting' ? 'b-wait' : r.status === 'processing' ? 'b-proc' : r.status === 'done' ? 'b-done' : 'b-err';
+    const badgeText = r.status === 'waiting' ? 'Waiting' : r.status === 'processing' ? 'Reading…' : r.status === 'done' ? '✓ Done' : 'Error';
+    const thumbHTML = isPDF
+      ? `<div class="q-thumb" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:#fff5f0;"><span style="font-size:24px;">📄</span><span style="font-size:9px;font-weight:700;color:#e8500a;letter-spacing:0.05em;">PDF</span></div>`
+      : `<img class="q-thumb" src="${URL.createObjectURL(f)}" alt="${f.name}" />`;
+    div.innerHTML = `${thumbHTML}
+      <div class="q-status-bar"><div class="q-status-fill" style="background:${barColor};width:${barWidth}%"></div></div>
+      <div class="q-info">
+        <div class="q-name">${f.name}</div>
+        <div class="q-size">${(f.size/1024).toFixed(0)} KB${r.data ? ' · ₹'+Number(r.data.grand_total||0).toLocaleString('en-IN',{maximumFractionDigits:0}) : ''}</div>
+      </div>
+      <span class="q-badge ${badgeClass}">${badgeText}</span>
+      <button class="q-remove" onclick="removeFile(${i})">✕</button>`;
+    grid.appendChild(div);
   });
-  document.getElementById('file-input').addEventListener('change', e => addFiles(Array.from(e.target.files)));
+}
 
-  function addFiles(newFiles) {
-    const remaining = remainingBills();
-    const valid = newFiles.filter(f => f.type.startsWith('image/') || f.type === 'application/pdf').slice(0, remaining);
-    if (!valid.length) { showToast('Please upload JPG, PNG, WEBP or PDF files'); return; }
-    if (newFiles.length > remaining) showToast(`Only ${remaining} bill(s) left today — added ${valid.length}`);
-    files = [...files, ...valid];
-    results = files.map((f, i) => results[i] || { file: f, status: 'waiting', data: null });
+function removeFile(i) {
+  files.splice(i,1); results.splice(i,1); renderQueue();
+  if (!files.length) document.getElementById('queue-section').style.display = 'none';
+}
+
+async function startProcessing() {
+  if (isProcessing || !files.length) return;
+  isProcessing = true;
+  const btn = document.getElementById('process-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Processing...';
+  document.getElementById('overall-progress').style.display = 'block';
+  document.getElementById('download-section').style.display = 'none';
+  document.getElementById('ad-middle').style.display = 'none';
+  let processed = 0;
+  for (let i = 0; i < files.length; i++) {
+    results[i].status = 'processing'; renderQueue(); updateProgress(i, files.length);
+    try {
+      const b64 = await toBase64(files[i]);
+      const resp = await fetch('/api/extract', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imageBase64: b64, mimeType: files[i].type }) });
+      const json = await resp.json();
+      if (json.success && json.data) { results[i].data = json.data; results[i].status = 'done'; processed++; }
+      else results[i].status = 'error';
+    } catch { results[i].status = 'error'; }
     renderQueue();
-    document.getElementById('queue-section').style.display = 'block';
-    document.getElementById('download-section').style.display = 'none';
-    document.getElementById('limit-warning').style.display = 'none';
-    setStep(1);
   }
+  const usage = getUsage(); saveUsage(usage.count + processed); updateUsageUI();
+  updateProgress(files.length, files.length);
+  isProcessing = false; btn.disabled = false; btn.innerHTML = '⚡ Re-process';
+  showDownload();
+}
 
-  function renderQueue() {
-    const grid = document.getElementById('queue-grid');
-    grid.innerHTML = '';
-    document.getElementById('queue-meta').textContent = files.length + ' file' + (files.length !== 1 ? 's' : '') + ' ready';
-    files.forEach((f, i) => {
-      const r = results[i];
-      const div = document.createElement('div');
-      div.className = 'q-item';
-      const isPDF = f.type === 'application/pdf';
-      const barColor = r.status === 'done' ? '#1a7a4a' : r.status === 'processing' ? '#1a4fd6' : r.status === 'error' ? '#c82828' : '#ccc';
-      const barWidth = ['done','error'].includes(r.status) ? '100' : r.status === 'processing' ? '60' : '0';
-      const badgeClass = r.status === 'waiting' ? 'b-wait' : r.status === 'processing' ? 'b-proc' : r.status === 'done' ? 'b-done' : 'b-err';
-      const badgeText = r.status === 'waiting' ? 'Waiting' : r.status === 'processing' ? 'Reading…' : r.status === 'done' ? '✓ Done' : 'Error';
-      const thumbHTML = isPDF
-        ? `<div class="q-thumb" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#fff5f0;">
-            <span style="font-size:28px;">📄</span>
-            <span style="font-size:10px;font-weight:600;color:#e8500a;letter-spacing:0.05em;">PDF</span>
-           </div>`
-        : `<img class="q-thumb" src="${URL.createObjectURL(f)}" alt="${f.name}" />`;
-      div.innerHTML = `
-        ${thumbHTML}
-        <div class="q-status-bar"><div class="q-status-fill" style="background:${barColor};width:${barWidth}%"></div></div>
-        <div class="q-info">
-          <div class="q-name">${f.name}</div>
-          <div class="q-size">${(f.size/1024).toFixed(0)} KB${r.data ? ' · ₹'+Number(r.data.grand_total||0).toLocaleString('en-IN',{maximumFractionDigits:0}) : ''}</div>
-        </div>
-        <span class="q-badge ${badgeClass}">${badgeText}</span>
-        <button class="q-remove" onclick="removeFile(${i})">✕</button>`;
-      grid.appendChild(div);
-    });
-  }
+function updateProgress(done, total) {
+  document.getElementById('op-bar').style.width = (total ? Math.round((done/total)*100) : 0) + '%';
+  document.getElementById('progress-count').textContent = done + ' / ' + total;
+  document.getElementById('progress-label').textContent = done < total ? 'Reading ' + (done+1) + ' of ' + total + '...' : 'Done! Building XML...';
+}
 
-  function removeFile(i) {
-    files.splice(i, 1); results.splice(i, 1);
-    renderQueue();
-    if (!files.length) document.getElementById('queue-section').style.display = 'none';
-  }
+function showDownload() {
+  const done = results.filter(r => r.status === 'done' && r.data);
+  const errors = results.filter(r => r.status === 'error');
+  const totalAmt = done.reduce((s,r) => s+Number(r.data.grand_total||0), 0);
+  const totalGst = done.reduce((s,r) => s+Number(r.data.total_gst||0), 0);
+  const totalItems = done.reduce((s,r) => s+(r.data.items||[]).length, 0);
+  document.getElementById('dl-subtitle').textContent = done.length + ' voucher' + (done.length!==1?'s':'') + ' extracted' + (errors.length ? ', ' + errors.length + ' failed' : '') + '.';
+  document.getElementById('summary-stats').innerHTML = `
+    <div class="stat-box"><div class="stat-val">${done.length}</div><div class="stat-lbl">Vouchers</div></div>
+    <div class="stat-box"><div class="stat-val">${totalItems}</div><div class="stat-lbl">Line items</div></div>
+    <div class="stat-box"><div class="stat-val">₹${totalAmt.toLocaleString('en-IN',{maximumFractionDigits:0})}</div><div class="stat-lbl">Total value</div></div>
+    <div class="stat-box"><div class="stat-val">₹${totalGst.toLocaleString('en-IN',{maximumFractionDigits:0})}</div><div class="stat-lbl">Total GST</div></div>`;
+  const tbody = document.getElementById('vouchers-tbody');
+  tbody.innerHTML = '';
+  done.forEach((r,i) => {
+    const d = r.data;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td class="mono">${d.date||'—'}</td><td class="mono">${d.voucher_no||'—'}</td>
+      <td style="font-weight:500;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.party_name||'—'}</td>
+      <td class="mono">${d.party_gstin||'—'}</td><td>${(d.items||[]).length}</td>
+      <td class="mono">₹${Number(d.subtotal||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
+      <td class="mono">₹${Number(d.total_gst||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
+      <td class="mono" style="font-weight:600;">₹${Number(d.grand_total||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
+      <td><span class="tag tag-blue">${d.voucher_type||'Purchase'}</span></td>`;
+    tbody.appendChild(tr);
+  });
+  fullXML = buildXML(done.map(r => r.data));
+  const preview = fullXML.substring(0,2500) + (fullXML.length > 2500 ? '\n\n<!-- ... truncated · download for full -->' : '');
+  document.getElementById('xml-preview').innerHTML = syntaxHL(preview);
+  document.getElementById('download-section').style.display = 'block';
+  document.getElementById('ad-middle').style.display = 'block';
+  document.getElementById('download-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast('✓ ' + done.length + ' vouchers ready!');
+}
 
-  // ── PROCESSING ──
-  async function startProcessing() {
-    if (isProcessing || !files.length) return;
-    isProcessing = true;
-    setStep(2);
-    const btn = document.getElementById('process-btn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spin"></span> Processing...';
-    document.getElementById('overall-progress').style.display = 'block';
-    document.getElementById('download-section').style.display = 'none';
-
-    let processedThisSession = 0;
-
-    for (let i = 0; i < files.length; i++) {
-      results[i].status = 'processing';
-      renderQueue();
-      updateProgress(i, files.length);
-      try {
-        const b64 = await toBase64(files[i]);
-        const resp = await fetch('/api/extract', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ imageBase64: b64, mimeType: files[i].type })
-        });
-        const json = await resp.json();
-        if (json.success && json.data) {
-          results[i].data = json.data;
-          results[i].status = 'done';
-          processedThisSession++;
-        } else {
-          results[i].status = 'error';
-        }
-      } catch(e) {
-        results[i].status = 'error';
-      }
-      renderQueue();
-    }
-
-    // Update usage count
-    const usage = getUsage();
-    saveUsage(usage.count + processedThisSession);
-    updateUsageUI();
-
-    updateProgress(files.length, files.length);
-    isProcessing = false;
-    btn.disabled = false;
-    btn.innerHTML = '⚡ Re-process';
-    showDownload();
-  }
-
-  function updateProgress(done, total) {
-    const pct = total ? Math.round((done/total)*100) : 0;
-    document.getElementById('op-bar').style.width = pct + '%';
-    document.getElementById('progress-count').textContent = done + ' / ' + total;
-    document.getElementById('progress-label').textContent = done < total ? 'Reading bill ' + (done+1) + ' of ' + total + '...' : 'All done! Building XML...';
-  }
-
-  function showDownload() {
-    setStep(3);
-    const done = results.filter(r => r.status === 'done' && r.data);
-    const errors = results.filter(r => r.status === 'error');
-    const totalAmt = done.reduce((s,r) => s + Number(r.data.grand_total||0), 0);
-    const totalGst = done.reduce((s,r) => s + Number(r.data.total_gst||0), 0);
-    const totalItems = done.reduce((s,r) => s + (r.data.items||[]).length, 0);
-
-    document.getElementById('dl-subtitle').textContent = done.length + ' voucher' + (done.length!==1?'s':'') + ' extracted' + (errors.length ? ', ' + errors.length + ' failed' : '') + '.';
-
-    document.getElementById('summary-stats').innerHTML = `
-      <div class="stat-box"><div class="stat-val">${done.length}</div><div class="stat-lbl">Vouchers</div></div>
-      <div class="stat-box"><div class="stat-val">${totalItems}</div><div class="stat-lbl">Line items</div></div>
-      <div class="stat-box"><div class="stat-val">₹${totalAmt.toLocaleString('en-IN',{maximumFractionDigits:0})}</div><div class="stat-lbl">Total value</div></div>
-      <div class="stat-box"><div class="stat-val">₹${totalGst.toLocaleString('en-IN',{maximumFractionDigits:0})}</div><div class="stat-lbl">Total GST</div></div>`;
-
-    const tbody = document.getElementById('vouchers-tbody');
-    tbody.innerHTML = '';
-    done.forEach((r, i) => {
-      const d = r.data;
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${i+1}</td><td class="mono">${d.date||'—'}</td><td class="mono">${d.voucher_no||'—'}</td>
-        <td style="font-weight:500;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.party_name||'—'}</td>
-        <td class="mono" style="font-size:11px;">${d.party_gstin||'—'}</td>
-        <td>${(d.items||[]).length}</td>
-        <td class="mono">₹${Number(d.subtotal||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
-        <td class="mono">₹${Number(d.total_gst||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
-        <td class="mono" style="font-weight:600;">₹${Number(d.grand_total||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
-        <td><span class="tag tag-blue">${d.voucher_type||'Purchase'}</span></td>`;
-      tbody.appendChild(tr);
-    });
-
-    fullXML = buildXML(done.map(r => r.data));
-    const preview = fullXML.substring(0, 2500) + (fullXML.length > 2500 ? '\n\n<!-- ... ' + done.length + ' vouchers · Download for full file -->' : '');
-    document.getElementById('xml-preview').innerHTML = syntaxHL(preview);
-    document.getElementById('download-section').style.display = 'block';
-    document.getElementById('download-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    showToast('✓ ' + done.length + ' vouchers ready!');
-  }
-
-  // ── XML BUILDER ──
-  function buildXML(vouchers) {
-    const e = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    const vxml = vouchers.map(d => {
-      const items = (d.items||[]).map(item => `        <ALLLEDGERENTRIES.LIST>
+function buildXML(vouchers) {
+  const e = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const vxml = vouchers.map(d => {
+    const items = (d.items||[]).map(item => `        <ALLLEDGERENTRIES.LIST>
           <LEDGERNAME>${e(item.description||'Stock Item')}</LEDGERNAME>
           <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
           <AMOUNT>-${Number(item.amount||0).toFixed(2)}</AMOUNT>
@@ -758,7 +670,7 @@
           <BILLEDQTY>${item.qty||0} ${e(item.unit||'Nos')}</BILLEDQTY>
           <RATE>${Number(item.rate||0).toFixed(2)}</RATE>
         </ALLLEDGERENTRIES.LIST>`).join('\n');
-      return `      <TALLYMESSAGE xmlns:UDF="TallyUDF">
+    return `      <TALLYMESSAGE xmlns:UDF="TallyUDF">
         <VOUCHER VCHTYPE="${e(d.voucher_type||'Purchase')}" ACTION="Create">
           <DATE>${(d.date||'').replace(/-/g,'')}</DATE>
           <VOUCHERTYPENAME>${e(d.voucher_type||'Purchase')}</VOUCHERTYPENAME>
@@ -772,99 +684,55 @@ ${items}
             <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
             <AMOUNT>${Number(d.grand_total||0).toFixed(2)}</AMOUNT>
           </ALLLEDGERENTRIES.LIST>
-          <ALLLEDGERENTRIES.LIST>
-            <LEDGERNAME>CGST</LEDGERNAME>
-            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
-            <AMOUNT>-${Number(d.cgst||0).toFixed(2)}</AMOUNT>
-          </ALLLEDGERENTRIES.LIST>
-          <ALLLEDGERENTRIES.LIST>
-            <LEDGERNAME>SGST</LEDGERNAME>
-            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
-            <AMOUNT>-${Number(d.sgst||0).toFixed(2)}</AMOUNT>
-          </ALLLEDGERENTRIES.LIST>
-          <ALLLEDGERENTRIES.LIST>
-            <LEDGERNAME>IGST</LEDGERNAME>
-            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
-            <AMOUNT>-${Number(d.igst||0).toFixed(2)}</AMOUNT>
-          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST><LEDGERNAME>CGST</LEDGERNAME><ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE><AMOUNT>-${Number(d.cgst||0).toFixed(2)}</AMOUNT></ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST><LEDGERNAME>SGST</LEDGERNAME><ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE><AMOUNT>-${Number(d.sgst||0).toFixed(2)}</AMOUNT></ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST><LEDGERNAME>IGST</LEDGERNAME><ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE><AMOUNT>-${Number(d.igst||0).toFixed(2)}</AMOUNT></ALLLEDGERENTRIES.LIST>
         </VOUCHER>
       </TALLYMESSAGE>`;
-    }).join('\n\n');
-    return `<?xml version="1.0" encoding="UTF-8"?>
+  }).join('\n\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
 <ENVELOPE>
   <HEADER><TALLYREQUEST>Import Data</TALLYREQUEST></HEADER>
-  <BODY>
-    <IMPORTDATA>
-      <REQUESTDESC>
-        <REPORTNAME>Vouchers</REPORTNAME>
-        <STATICVARIABLES><SVCURRENTCOMPANY>##SVCURRENTCOMPANY</SVCURRENTCOMPANY></STATICVARIABLES>
-      </REQUESTDESC>
-      <REQUESTDATA>
+  <BODY><IMPORTDATA>
+    <REQUESTDESC><REPORTNAME>Vouchers</REPORTNAME><STATICVARIABLES><SVCURRENTCOMPANY>##SVCURRENTCOMPANY</SVCURRENTCOMPANY></STATICVARIABLES></REQUESTDESC>
+    <REQUESTDATA>
 ${vxml}
-      </REQUESTDATA>
-    </IMPORTDATA>
-  </BODY>
+    </REQUESTDATA>
+  </IMPORTDATA></BODY>
 </ENVELOPE>`;
-  }
+}
 
-  function syntaxHL(xml) {
-    return xml.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/(&lt;\/?[\w.]+)/g,'<span class="kw">$1</span>')
-      .replace(/&gt;([^&\n<]+)&lt;\//g,'&gt;<span class="val">$1</span>&lt;/');
-  }
+function syntaxHL(xml) {
+  return xml.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/(&lt;\/?[\w.]+)/g,'<span class="kw">$1</span>')
+    .replace(/&gt;([^&\n<]+)&lt;\//g,'&gt;<span class="val">$1</span>&lt;/');
+}
 
-  function downloadXML() {
-    const blob = new Blob([fullXML], { type: 'text/xml' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    const d = new Date();
-    a.download = `tally_import_${d.getFullYear()}_${String(d.getMonth()+1).padStart(2,'0')}.xml`;
-    a.click();
-    showToast('✓ Download started');
-  }
+function downloadXML() {
+  const blob = new Blob([fullXML],{type:'text/xml'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  const d = new Date(); a.download = `tally_import_${d.getFullYear()}_${String(d.getMonth()+1).padStart(2,'0')}.xml`;
+  a.click(); showToast('✓ Download started');
+}
+function copyXML() { navigator.clipboard.writeText(fullXML).then(() => showToast('✓ Copied!')); }
 
-  function copyXML() { navigator.clipboard.writeText(fullXML).then(() => showToast('✓ Copied!')); }
-
-  function clearAll() {
-    files = []; results = []; fullXML = '';
-    isProcessing = false;
-    document.getElementById('queue-section').style.display = 'none';
-    document.getElementById('download-section').style.display = 'none';
-    document.getElementById('limit-warning').style.display = 'none';
-    document.getElementById('file-input').value = '';
-    document.getElementById('op-bar').style.width = '0%';
-    document.getElementById('overall-progress').style.display = 'none';
-    const btn = document.getElementById('process-btn');
-    btn.disabled = false; btn.innerHTML = '⚡ Process all bills';
-    setStep(1);
-  }
-
-  function setStep(n) {
-    [1,2,3].forEach(i => {
-      const el = document.getElementById('step'+i);
-      if (i <= n) el.classList.add('active'); else el.classList.remove('active');
-    });
-  }
-
-  function toBase64(file) {
-    return new Promise((res, rej) => {
-      const r = new FileReader();
-      r.onload = e => res(e.target.result.split(',')[1]);
-      r.onerror = () => rej(new Error('read failed'));
-      r.readAsDataURL(file);
-    });
-  }
-
-  let toastTimer;
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  // ── INIT ──
-  updateUsageUI();
+function clearAll() {
+  files=[]; results=[]; fullXML=''; isProcessing=false;
+  document.getElementById('queue-section').style.display='none';
+  document.getElementById('download-section').style.display='none';
+  document.getElementById('ad-middle').style.display='none';
+  document.getElementById('limit-warning').style.display='none';
+  document.getElementById('file-input').value='';
+  document.getElementById('op-bar').style.width='0%';
+  document.getElementById('overall-progress').style.display='none';
+  const btn=document.getElementById('process-btn');
+  btn.disabled=false; btn.innerHTML='⚡ Process all';
+}
+function setStep(n) { [1,2,3].forEach(i => { const el=document.getElementById('step'+i); if(el){ if(i<=n) el.classList.add('active'); else el.classList.remove('active'); } }); }
+function toBase64(file) { return new Promise((res,rej) => { const r=new FileReader(); r.onload=e=>res(e.target.result.split(',')[1]); r.onerror=()=>rej(new Error('read failed')); r.readAsDataURL(file); }); }
+let toastTimer;
+function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3000); }
+updateUsageUI();
 </script>
 </body>
 </html>
