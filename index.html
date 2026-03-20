@@ -216,7 +216,19 @@
     .download-card { padding: 1.5rem; }
     .pricing-grid { grid-template-columns: 1fr; }
     .upgrade-banner { flex-direction: column; text-align: center; }
+    .how-desktop { display: none !important; }
+    .how-mobile { display: flex !important; }
   }
+  @media (min-width: 701px) {
+    .how-desktop { display: grid !important; }
+    .how-mobile { display: none !important; }
+  }
+  .how-mobile { flex-direction: column; gap: 0; }
+  .how-m-step { display: flex; align-items: center; gap: 14px; background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+  .how-m-icon { width: 40px; height: 40px; background: var(--accent-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .how-m-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .how-m-sub { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+  .how-m-arrow { text-align: center; font-size: 18px; color: var(--ink3); padding: 4px 0; }
 </style>
 </head>
 <body>
@@ -267,13 +279,86 @@
   </div>
 </div>
 
-<!-- STEPS -->
-<div class="steps" style="margin-top:2rem;" id="steps-row">
-  <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">Upload</div></div>
-  <div class="step-line"></div>
-  <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">Extract</div></div>
-  <div class="step-line"></div>
-  <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">Download</div></div>
+<!-- HOW IT WORKS FLOW -->
+<div style="max-width:860px;margin:0 auto 2rem;padding:0 1.5rem;">
+  <p style="text-align:center;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.5rem;">How it works</p>
+
+  <div class="how-desktop" style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:0;">
+
+    <!-- STEP 1 -->
+    <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1rem;text-align:center;position:relative;">
+      <div style="width:48px;height:48px;background:#fff3ee;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">📱</div>
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent2);margin-bottom:4px;">Step 1</div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;">Receive invoice</div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">PDF on WhatsApp, email, or scanned bill</div>
+    </div>
+
+    <!-- ARROW -->
+    <div style="display:flex;flex-direction:column;align-items:center;padding:0 8px;">
+      <div style="width:32px;height:2px;background:var(--border-strong);position:relative;">
+        <div style="position:absolute;right:-5px;top:-4px;width:0;height:0;border-left:8px solid var(--border-strong);border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1rem;text-align:center;">
+      <div style="width:48px;height:48px;background:var(--accent-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">⬆</div>
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);margin-bottom:4px;">Step 2</div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;">Upload to TallySnap</div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Drag &amp; drop up to 50 PDFs at once</div>
+    </div>
+
+    <!-- ARROW -->
+    <div style="display:flex;flex-direction:column;align-items:center;padding:0 8px;">
+      <div style="width:32px;height:2px;background:var(--border-strong);position:relative;">
+        <div style="position:absolute;right:-5px;top:-4px;width:0;height:0;border-left:8px solid var(--border-strong);border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1rem;text-align:center;position:relative;">
+      <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:10px;font-weight:600;padding:2px 10px;border-radius:99px;white-space:nowrap;">AI Magic ✦</div>
+      <div style="width:48px;height:48px;background:#f0f4ff;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">🤖</div>
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);margin-bottom:4px;">Step 3</div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;">AI reads everything</div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Party name, GSTIN, items, HSN, GST — all extracted</div>
+    </div>
+
+    <!-- ARROW -->
+    <div style="display:flex;flex-direction:column;align-items:center;padding:0 8px;">
+      <div style="width:32px;height:2px;background:var(--border-strong);position:relative;">
+        <div style="position:absolute;right:-5px;top:-4px;width:0;height:0;border-left:8px solid var(--border-strong);border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div style="background:var(--paper);border:1.5px solid rgba(26,122,74,0.3);border-radius:var(--radius-lg);padding:1.25rem 1rem;text-align:center;">
+      <div style="width:48px;height:48px;background:var(--success-light);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">✅</div>
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--success);margin-bottom:4px;">Step 4</div>
+      <div style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;">Import into Tally</div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Download XML → import in Tally Prime in one click</div>
+    </div>
+
+  </div>
+
+  <!-- MOBILE VERSION (visible only on small screens) -->
+  <div class="how-mobile">
+    <div class="how-m-step"><div class="how-m-icon">📱</div><div><div class="how-m-title">Receive invoice</div><div class="how-m-sub">PDF on WhatsApp, email, or scanned bill</div></div></div>
+    <div class="how-m-arrow">↓</div>
+    <div class="how-m-step"><div class="how-m-icon">⬆</div><div><div class="how-m-title">Upload to TallySnap</div><div class="how-m-sub">Drag &amp; drop up to 50 PDFs at once</div></div></div>
+    <div class="how-m-arrow">↓</div>
+    <div class="how-m-step"><div class="how-m-icon">🤖</div><div><div class="how-m-title">AI reads everything</div><div class="how-m-sub">Party, GSTIN, items, HSN, GST — all extracted</div></div></div>
+    <div class="how-m-arrow">↓</div>
+    <div class="how-m-step" style="border-color:rgba(26,122,74,0.3);"><div class="how-m-icon" style="background:var(--success-light);">✅</div><div><div class="how-m-title">Import into Tally</div><div class="how-m-sub">Download XML → import in Tally Prime</div></div></div>
+  </div>
+
+</div>
+
+<!-- PROGRESS STEPS (hidden, used by JS) -->
+<div id="steps-row" style="display:none;">
+  <div class="step active" id="step1"></div>
+  <div class="step" id="step2"></div>
+  <div class="step" id="step3"></div>
 </div>
 
 <!-- MAIN -->
@@ -783,4 +868,3 @@ ${vxml}
 </script>
 </body>
 </html>
-
