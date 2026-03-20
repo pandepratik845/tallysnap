@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TallySnap — Invoice to Tally XML in Seconds</title>
+<meta name="description" content="Upload any invoice, purchase bill or challan and instantly get a Tally-ready XML file. Free, fast, AI-powered." />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID once approved -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0f1117; --ink2: #3a3d47; --ink3: #7c808c;
+    --surface: #f5f4ef; --paper: #fdfcf8;
+    --accent: #1a4fd6; --accent-light: #e8eefb;
+    --accent2: #e8500a;
+    --success: #1a7a4a; --success-light: #e6f4ec;
+    --warn: #b85c00; --warn-light: #fff3e6;
+    --border: rgba(15,17,23,0.10); --border-strong: rgba(15,17,23,0.18);
+    --radius: 12px; --radius-lg: 20px;
+    --shadow: 0 2px 12px rgba(15,17,23,0.08);
+    --shadow-lg: 0 8px 40px rgba(15,17,23,0.13);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Outfit', sans-serif; background: var(--surface); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+  /* HEADER */
+  header { background: var(--paper); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); text-decoration: none; }
+  .logo-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; }
+  .logo span { color: var(--accent2); font-style: italic; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .header-tag { font-size: 12px; font-weight: 500; background: var(--accent-light); color: var(--accent); padding: 4px 12px; border-radius: 99px; }
+  .free-badge { font-size: 12px; font-weight: 600; background: var(--success-light); color: var(--success); padding: 4px 12px; border-radius: 99px; }
+
+  /* AD BANNER TOP */
+  .ad-banner-top { background: var(--paper); border-bottom: 1px solid var(--border); padding: 10px 2rem; text-align: center; min-height: 70px; display: flex; align-items: center; justify-content: center; }
+  .ad-placeholder { background: var(--surface); border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 14px 40px; color: var(--ink3); font-size: 12px; width: 100%; max-width: 728px; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 4rem 2rem 2.5rem; max-width: 680px; margin: 0 auto; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 1.2rem; background: #fff3ee; padding: 5px 14px; border-radius: 99px; border: 1px solid rgba(232,80,10,0.15); }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 em { color: var(--accent); font-style: italic; }
+  .hero p { font-size: 16px; color: var(--ink2); font-weight: 300; max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.7; }
+
+  /* USAGE METER */
+  .usage-bar-wrap { max-width: 340px; margin: 0 auto 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
+  .usage-bar-fill { height: 8px; border-radius: 99px; background: var(--accent); transition: width 0.4s; }
+  .usage-text { font-size: 12px; color: var(--ink3); text-align: center; margin-bottom: 2rem; }
+  .usage-text strong { color: var(--ink); }
+
+  /* UPGRADE BANNER */
+  .upgrade-banner { background: linear-gradient(135deg, #1a4fd6 0%, #0e35a0 100%); color: #fff; border-radius: var(--radius-lg); padding: 1.25rem 1.75rem; margin: 0 auto 2rem; max-width: 860px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .upgrade-banner h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 2px; }
+  .upgrade-banner p { font-size: 13px; opacity: 0.85; }
+  .btn-white { background: #fff; color: var(--accent); border: none; padding: 9px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif; transition: opacity 0.15s; }
+  .btn-white:hover { opacity: 0.9; }
+
+  /* STEPS */
+  .steps { display: flex; justify-content: center; gap: 0; padding: 0 2rem 2.5rem; max-width: 700px; margin: 0 auto; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; text-align: center; }
+  .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--paper); border: 1.5px solid var(--border-strong); font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; color: var(--ink3); }
+  .step.active .step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .step-label { font-size: 12px; font-weight: 500; color: var(--ink3); }
+  .step.active .step-label { color: var(--accent); }
+  .step-line { flex: 1; height: 1.5px; background: var(--border-strong); margin-top: 16px; }
+
+  /* MAIN */
+  .main { max-width: 860px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+  /* UPLOAD */
+  .upload-card { background: var(--paper); border: 1.5px dashed var(--border-strong); border-radius: var(--radius-lg); padding: 3.5rem 2rem; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.15s; position: relative; overflow: hidden; }
+  .upload-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 60% 40%, rgba(26,79,214,0.04) 0%, transparent 70%); pointer-events: none; }
+  .upload-card:hover { border-color: var(--accent); background: #f8faff; transform: translateY(-1px); }
+  .upload-card.dragging { border-color: var(--accent); background: var(--accent-light); }
+  .upload-card.limit-reached { border-color: #e24b4b; background: #fff5f5; cursor: not-allowed; }
+  .upload-icon { width: 64px; height: 64px; background: var(--accent-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 28px; transition: transform 0.2s; }
+  .upload-card:hover .upload-icon { transform: scale(1.08); }
+  .upload-card h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 6px; }
+  .upload-card p { color: var(--ink3); font-size: 14px; }
+  .upload-formats { margin-top: 1.2rem; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .fmt-tag { font-size: 11px; font-weight: 500; background: var(--surface); border: 1px solid var(--border); color: var(--ink3); padding: 3px 10px; border-radius: 99px; }
+
+  /* QUEUE */
+  #queue-section { display: none; margin-top: 1.5rem; }
+  .queue-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+  .queue-title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; }
+  .queue-meta { font-size: 13px; color: var(--ink3); }
+  .queue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+  .q-item { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; position: relative; transition: box-shadow 0.15s; }
+  .q-item:hover { box-shadow: var(--shadow); }
+  .q-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: var(--surface); }
+  .q-info { padding: 8px 10px; }
+  .q-name { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
+  .q-size { font-size: 11px; color: var(--ink3); }
+  .q-status-bar { height: 3px; background: var(--border); position: relative; overflow: hidden; }
+  .q-status-fill { position: absolute; inset-y: 0; left: 0; width: 0%; transition: width 0.4s; }
+  .q-badge { position: absolute; top: 8px; right: 8px; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+  .b-wait { background: rgba(255,255,255,0.85); color: var(--ink3); }
+  .b-proc { background: rgba(26,79,214,0.85); color: #fff; }
+  .b-done { background: rgba(26,122,74,0.85); color: #fff; }
+  .b-err  { background: rgba(200,40,40,0.85); color: #fff; }
+  .q-remove { position: absolute; top: 8px; left: 8px; width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,0.45); border: none; color: #fff; font-size: 13px; cursor: pointer; display: none; align-items: center; justify-content: center; line-height: 1; }
+  .q-item:hover .q-remove { display: flex; }
+
+  /* PROGRESS */
+  .overall-progress { margin-bottom: 1.5rem; display: none; }
+  .op-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+  .op-label span:first-child { font-weight: 500; }
+  .op-label span:last-child { color: var(--ink3); font-family: 'DM Mono', monospace; }
+  .op-bar-wrap { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .op-bar { height: 8px; background: var(--accent); border-radius: 99px; width: 0%; transition: width 0.4s; }
+
+  /* BUTTONS */
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 22px; border-radius: var(--radius); border: 1.5px solid var(--border-strong); font-size: 14px; font-weight: 500; font-family: 'Outfit', sans-serif; cursor: pointer; background: var(--paper); color: var(--ink); transition: all 0.15s; text-decoration: none; }
+  .btn:hover { background: var(--surface); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #1440b0; }
+  .btn-primary:disabled { background: #a0b4e8; border-color: #a0b4e8; cursor: not-allowed; }
+  .btn-success { background: var(--success); color: #fff; border-color: var(--success); font-size: 15px; padding: 13px 28px; }
+  .btn-success:hover { background: #155a38; }
+  .btn-ghost { border-color: transparent; }
+  .btn-ghost:hover { background: var(--surface); border-color: var(--border); }
+  .spin { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spinning 0.65s linear infinite; display: inline-block; }
+  @keyframes spinning { to { transform: rotate(360deg); } }
+
+  /* AD SIDEBAR */
+  .content-with-ad { display: grid; grid-template-columns: 1fr 160px; gap: 1.5rem; align-items: start; }
+  .ad-sidebar { position: sticky; top: 80px; }
+  .ad-sidebar-placeholder { background: var(--paper); border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 12px; text-align: center; color: var(--ink3); font-size: 11px; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+
+  /* DOWNLOAD SECTION */
+  #download-section { display: none; margin-top: 2rem; }
+  .download-card { background: var(--paper); border: 1.5px solid rgba(26,122,74,0.25); border-radius: var(--radius-lg); padding: 2.5rem; text-align: center; position: relative; overflow: hidden; animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1); }
+  .download-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(26,122,74,0.05) 0%, transparent 60%); pointer-events: none; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+  .dl-icon { width: 72px; height: 72px; background: var(--success-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 32px; animation: bounceIn 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.1s both; }
+  @keyframes bounceIn { from { transform:scale(0.4); opacity:0; } to { transform:scale(1); opacity:1; } }
+  .download-card h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 6px; }
+  .download-card > p { color: var(--ink3); font-size: 14px; margin-bottom: 1.8rem; }
+  .summary-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 2rem; text-align: left; }
+  .stat-box { background: var(--surface); border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--border); }
+  .stat-val { font-size: 22px; font-weight: 600; color: var(--ink); font-family: 'DM Mono', monospace; }
+  .stat-lbl { font-size: 11px; color: var(--ink3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+  /* AD between download and table */
+  .ad-middle { text-align: center; margin: 1.5rem 0; }
+  .ad-middle-placeholder { background: var(--paper); border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 14px 40px; color: var(--ink3); font-size: 12px; display: inline-block; width: 100%; max-width: 728px; min-height: 90px; display: flex; align-items: center; justify-content: center; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+  table.vouchers { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
+  table.vouchers th { background: var(--surface); padding: 9px 12px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink3); border-bottom: 1.5px solid var(--border-strong); white-space: nowrap; }
+  table.vouchers td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--ink); vertical-align: middle; }
+  table.vouchers tr:last-child td { border-bottom: none; }
+  table.vouchers tr:hover td { background: var(--surface); }
+  .mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 99px; }
+  .tag-green { background: var(--success-light); color: var(--success); }
+  .tag-blue { background: var(--accent-light); color: var(--accent); }
+
+  /* XML */
+  .xml-block { background: #0f1117; color: #a8d8a8; font-family: 'DM Mono', monospace; font-size: 11.5px; line-height: 1.65; border-radius: var(--radius); padding: 1.25rem 1.5rem; overflow: auto; max-height: 240px; text-align: left; margin-top: 1rem; }
+  .xml-block .kw { color: #88aaff; }
+  .xml-block .val { color: #a8d8a8; }
+
+  /* HOW TO IMPORT */
+  .how-to { background: var(--paper); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.75rem; margin-top: 1.5rem; }
+  .how-to h3 { font-family: 'DM Serif Display', serif; font-size: 1.15rem; margin-bottom: 1rem; }
+  .how-steps { display: flex; flex-direction: column; gap: 10px; }
+  .how-step { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; }
+  .how-step-num { min-width: 26px; height: 26px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .how-step-text { color: var(--ink2); line-height: 1.55; }
+  .how-step-text strong { color: var(--ink); font-weight: 600; }
+  code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--surface); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; color: var(--accent); }
+
+  /* PRICING SECTION */
+  .pricing-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .pricing-section h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; text-align: center; margin-bottom: 0.5rem; }
+  .pricing-section > p { text-align: center; color: var(--ink3); font-size: 14px; margin-bottom: 2rem; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .price-card { background: var(--paper); border: 1.5px solid var(--border-strong); border-radius: var(--radius-lg); padding: 1.75rem; text-align: center; position: relative; transition: transform 0.15s, box-shadow 0.15s; }
+  .price-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .price-card.featured { border-color: var(--accent); }
+  .price-card.featured::before { content: 'Most Popular'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 14px; border-radius: 99px; }
+  .price-name { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink3); margin-bottom: 8px; }
+  .price-amount { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--ink); margin-bottom: 4px; }
+  .price-amount span { font-size: 14px; font-family: 'Outfit', sans-serif; font-weight: 400; color: var(--ink3); }
+  .price-limit { font-size: 13px; color: var(--ink2); margin-bottom: 1.25rem; }
+  .price-features { list-style: none; text-align: left; font-size: 13px; color: var(--ink2); display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+  .price-features li::before { content: '✓ '; color: var(--success); font-weight: 600; }
+  .coming-soon-tag { background: var(--warn-light); color: var(--warn); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; display: inline-block; margin-top: 8px; }
+
+  /* FOOTER */
+  footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--ink3); border-top: 1px solid var(--border); margin-top: 3rem; }
+  footer a { color: var(--ink3); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--ink); color: #fff; padding: 12px 20px; border-radius: var(--radius); font-size: 14px; opacity: 0; transform: translateY(12px); transition: all 0.25s; pointer-events: none; z-index: 999; max-width: 300px; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* LIMIT WARNING */
+  .limit-warning { background: #fff5f5; border: 1.5px solid rgba(226,75,74,0.3); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin-top: 1rem; display: none; }
+  .limit-warning h3 { font-family: 'DM Serif Display', serif; color: #a32d2d; margin-bottom: 6px; }
+  .limit-warning p { font-size: 14px; color: var(--ink2); }
+
+  @media (max-width: 700px) {
+    .content-with-ad { grid-template-columns: 1fr; }
+    .ad-sidebar { display: none; }
+    .hero { padding: 2.5rem 1.25rem 1.5rem; }
+    .main { padding: 0 1rem 2rem; }
+    .download-card { padding: 1.5rem; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .upgrade-banner { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">
+    <div class="logo-icon">✦</div>
+    Tally<span>Snap</span>
+  </a>
+  <div class="header-right">
+    <span class="free-badge">Free Plan</span>
+    <span class="header-tag">AI · GST Ready</span>
+  </div>
+</header>
+
+<!-- TOP AD BANNER -->
+<div class="ad-banner-top">
+  <!-- Replace this div with your AdSense ad unit code once approved -->
+  <div class="ad-placeholder">
+    📢 Advertisement — Google AdSense 728×90 (Leaderboard)<br>
+    <small>Replace this with your AdSense code after approval</small>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">✦ Invoice Scanner for Tally</div>
+  <h1>Turn bills into <em>Tally entries</em> in seconds</h1>
+  <p>Upload any invoice, purchase bill, or challan — AI reads every detail and exports a ready-to-import Tally XML. Bulk process an entire month in one go.</p>
+
+  <div class="usage-bar-wrap">
+    <div class="usage-bar-fill" id="usage-bar" style="width:0%"></div>
+  </div>
+  <div class="usage-text" id="usage-text">
+    <strong id="bills-used">0</strong> of <strong>5</strong> free bills used today
+  </div>
+</section>
+
+<!-- UPGRADE BANNER -->
+<div style="max-width:860px;margin:0 auto;padding:0 1.5rem;">
+  <div class="upgrade-banner">
+    <div>
+      <h3>Need more than 5 bills/day?</h3>
+      <p>Starter plan (₹499/mo) · Pro plan (₹999/mo) · Launching soon — join the waitlist!</p>
+    </div>
+    <button class="btn-white" onclick="document.getElementById('pricing-section').scrollIntoView({behavior:'smooth'})">See Plans →</button>
+  </div>
+</div>
+
+<!-- STEPS -->
+<div class="steps" style="margin-top:2rem;" id="steps-row">
+  <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">Upload</div></div>
+  <div class="step-line"></div>
+  <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">Extract</div></div>
+  <div class="step-line"></div>
+  <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">Download</div></div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="content-with-ad">
+    <div>
+      <!-- UPLOAD ZONE -->
+      <div class="upload-card" id="upload-zone" onclick="handleUploadClick()">
+        <div class="upload-icon">📂</div>
+        <h2>Drop your invoices here</h2>
+        <p>Click to browse, or drag &amp; drop multiple files at once</p>
+        <div class="upload-formats">
+          <span class="fmt-tag">JPG</span>
+          <span class="fmt-tag">PNG</span>
+          <span class="fmt-tag">WEBP</span>
+          <span class="fmt-tag">Multiple files OK</span>
+          <span class="fmt-tag">5 bills/day free</span>
+        </div>
+      </div>
+      <input type="file" id="file-input" accept="image/*" multiple style="display:none;" />
+
+      <!-- LIMIT WARNING -->
+      <div class="limit-warning" id="limit-warning">
+        <h3>Daily limit reached</h3>
+        <p>You've used all 5 free bills for today. Your limit resets at midnight. Upgrade to process more!</p>
+      </div>
+
+      <!-- QUEUE SECTION -->
+      <div id="queue-section">
+        <div class="queue-header" style="margin-top:1.75rem;">
+          <div>
+            <div class="queue-title">Uploaded bills</div>
+            <div class="queue-meta" id="queue-meta">0 files ready</div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" onclick="clearAll()">✕ Clear all</button>
+            <button class="btn" onclick="handleUploadClick()">+ Add more</button>
+            <button class="btn btn-primary" id="process-btn" onclick="startProcessing()">
+              ⚡ Process all bills
+            </button>
+          </div>
+        </div>
+        <div class="overall-progress" id="overall-progress">
+          <div class="op-label">
+            <span id="progress-label">Extracting invoice data...</span>
+            <span id="progress-count">0 / 0</span>
+          </div>
+          <div class="op-bar-wrap"><div class="op-bar" id="op-bar"></div></div>
+        </div>
+        <div class="queue-grid" id="queue-grid"></div>
+      </div>
+
+      <!-- DOWNLOAD SECTION -->
+      <div id="download-section">
+        <div class="download-card">
+          <div class="dl-icon">✓</div>
+          <h2>Your Tally XML is ready!</h2>
+          <p id="dl-subtitle">All vouchers extracted and packaged into one importable file.</p>
+          <div class="summary-stats" id="summary-stats"></div>
+          <div class="btn-row" style="justify-content:center; margin-bottom:1.5rem;">
+            <button class="btn btn-success" onclick="downloadXML()">⬇ Download tally_import.xml</button>
+            <button class="btn" onclick="copyXML()">Copy XML</button>
+            <button class="btn btn-ghost" onclick="clearAll()">Start over</button>
+          </div>
+          <details>
+            <summary style="cursor:pointer;font-size:13px;color:var(--ink3);font-weight:500;outline:none;">Preview XML</summary>
+            <div class="xml-block" id="xml-preview"></div>
+          </details>
+        </div>
+
+        <!-- AD IN MIDDLE -->
+        <div class="ad-middle">
+          <div class="ad-middle-placeholder">
+            📢 Advertisement — Google AdSense 728×90<br>
+            <small>Replace with AdSense code after approval</small>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem;">
+          <h3 style="font-family:'DM Serif Display',serif;font-size:1.15rem;margin-bottom:10px;">Extracted vouchers</h3>
+          <div class="table-wrap">
+            <table class="vouchers">
+              <thead>
+                <tr><th>#</th><th>Date</th><th>Voucher no.</th><th>Party name</th><th>GSTIN</th><th>Items</th><th>Subtotal</th><th>GST</th><th>Grand total</th><th>Type</th></tr>
+              </thead>
+              <tbody id="vouchers-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="how-to">
+          <h3>How to import into Tally</h3>
+          <div class="how-steps">
+            <div class="how-step"><div class="how-step-num">1</div><div class="how-step-text">Open <strong>Tally Prime</strong> and ensure your company is loaded.</div></div>
+            <div class="how-step"><div class="how-step-num">2</div><div class="how-step-text">Go to <strong>Gateway of Tally</strong> → <code>Import</code> → <code>Data</code></div></div>
+            <div class="how-step"><div class="how-step-num">3</div><div class="how-step-text">Select <strong>Vouchers</strong> as the import type.</div></div>
+            <div class="how-step"><div class="how-step-num">4</div><div class="how-step-text">Browse and select the downloaded <code>tally_import.xml</code> file.</div></div>
+            <div class="how-step"><div class="how-step-num">5</div><div class="how-step-text">Click <strong>Import</strong>. Ensure ledgers like <code>Purchase Account</code>, <code>CGST</code>, <code>SGST</code>, <code>IGST</code> exist in your company.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR AD -->
+    <div class="ad-sidebar">
+      <div class="ad-sidebar-placeholder">
+        📢 Ad<br>160×320<br><small>AdSense sidebar</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING SECTION -->
+  <div class="pricing-section" id="pricing-section">
+    <h2>Simple, honest pricing</h2>
+    <p>Start free. Upgrade when you need more.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Free</div>
+        <div class="price-amount">₹0 <span>/ month</span></div>
+        <div class="price-limit">5 bills per day</div>
+        <ul class="price-features">
+          <li>Tally XML export</li>
+          <li>GST extraction</li>
+          <li>All bill formats</li>
+          <li>Ad-supported</li>
+        </ul>
+        <span style="font-size:13px;color:var(--success);font-weight:600;">✓ You're on this plan</span>
+      </div>
+      <div class="price-card featured">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">₹499 <span>/ month</span></div>
+        <div class="price-limit">50 bills per day</div>
+        <ul class="price-features">
+          <li>Everything in Free</li>
+          <li>No ads</li>
+          <li>Priority processing</li>
+          <li>Email support</li>
+        </ul>
+        <div><span class="coming-soon-tag">Coming Soon</span></div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Pro</div>
+        <div class="price-amount">₹999 <span>/ month</span></div>
+        <div class="price-limit">Unlimited bills</div>
+        <ul class="price-features">
+          <li>Everything in Starter</li>
+          <li>Bulk processing</li>
+          <li>API access</li>
+          <li>Priority support</li>
+        </ul>
+        <div><span class="coming-soon-tag">Coming Soon</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p style="margin-bottom:6px;">© 2025 TallySnap · AI-powered invoice extraction for India</p>
+  <p><a href="#">Privacy Policy</a> · <a href="#">Terms of Use</a> · <a href="#">Contact</a> · Not affiliated with Tally Solutions Pvt. Ltd.</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONSTANTS ──
+  const FREE_LIMIT = 5;
+  const STORAGE_KEY = 'tallysnap_usage';
+
+  // ── USAGE TRACKING ──
+  function getUsage() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return { date: today(), count: 0 };
+      const parsed = JSON.parse(stored);
+      if (parsed.date !== today()) return { date: today(), count: 0 };
+      return parsed;
+    } catch { return { date: today(), count: 0 }; }
+  }
+
+  function saveUsage(count) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today(), count }));
+  }
+
+  function today() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function remainingBills() {
+    return Math.max(0, FREE_LIMIT - getUsage().count);
+  }
+
+  function updateUsageUI() {
+    const used = getUsage().count;
+    const pct = Math.min(100, (used / FREE_LIMIT) * 100);
+    document.getElementById('usage-bar').style.width = pct + '%';
+    document.getElementById('usage-bar').style.background = pct >= 100 ? '#e24b4a' : pct >= 80 ? '#e8500a' : '#1a4fd6';
+    document.getElementById('bills-used').textContent = used;
+  }
+
+  // ── STATE ──
+  let files = [];
+  let results = [];
+  let isProcessing = false;
+  let fullXML = '';
+
+  // ── UPLOAD HANDLING ──
+  function handleUploadClick() {
+    if (remainingBills() <= 0) {
+      document.getElementById('limit-warning').style.display = 'block';
+      showToast('Daily limit reached. Resets at midnight!');
+      return;
+    }
+    document.getElementById('file-input').click();
+  }
+
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); if (remainingBills() > 0) zone.classList.add('dragging'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('dragging');
+    if (remainingBills() <= 0) { showToast('Daily limit reached!'); return; }
+    addFiles(Array.from(e.dataTransfer.files));
+  });
+  document.getElementById('file-input').addEventListener('change', e => addFiles(Array.from(e.target.files)));
+
+  function addFiles(newFiles) {
+    const remaining = remainingBills();
+    const imgs = newFiles.filter(f => f.type.startsWith('image/')).slice(0, remaining);
+    if (!imgs.length) { showToast('No valid image files or limit reached'); return; }
+    if (newFiles.length > remaining) showToast(`Only ${remaining} bill(s) left today — added ${imgs.length}`);
+    files = [...files, ...imgs];
+    results = files.map((f, i) => results[i] || { file: f, status: 'waiting', data: null });
+    renderQueue();
+    document.getElementById('queue-section').style.display = 'block';
+    document.getElementById('download-section').style.display = 'none';
+    document.getElementById('limit-warning').style.display = 'none';
+    setStep(1);
+  }
+
+  function renderQueue() {
+    const grid = document.getElementById('queue-grid');
+    grid.innerHTML = '';
+    document.getElementById('queue-meta').textContent = files.length + ' file' + (files.length !== 1 ? 's' : '') + ' ready';
+    files.forEach((f, i) => {
+      const r = results[i];
+      const div = document.createElement('div');
+      div.className = 'q-item';
+      const url = URL.createObjectURL(f);
+      const barColor = r.status === 'done' ? '#1a7a4a' : r.status === 'processing' ? '#1a4fd6' : r.status === 'error' ? '#c82828' : '#ccc';
+      const barWidth = ['done','error'].includes(r.status) ? '100' : r.status === 'processing' ? '60' : '0';
+      const badgeClass = r.status === 'waiting' ? 'b-wait' : r.status === 'processing' ? 'b-proc' : r.status === 'done' ? 'b-done' : 'b-err';
+      const badgeText = r.status === 'waiting' ? 'Waiting' : r.status === 'processing' ? 'Reading…' : r.status === 'done' ? '✓ Done' : 'Error';
+      div.innerHTML = `
+        <img class="q-thumb" src="${url}" alt="${f.name}" />
+        <div class="q-status-bar"><div class="q-status-fill" style="background:${barColor};width:${barWidth}%"></div></div>
+        <div class="q-info">
+          <div class="q-name">${f.name}</div>
+          <div class="q-size">${(f.size/1024).toFixed(0)} KB${r.data ? ' · ₹'+Number(r.data.grand_total||0).toLocaleString('en-IN',{maximumFractionDigits:0}) : ''}</div>
+        </div>
+        <span class="q-badge ${badgeClass}">${badgeText}</span>
+        <button class="q-remove" onclick="removeFile(${i})">✕</button>`;
+      grid.appendChild(div);
+    });
+  }
+
+  function removeFile(i) {
+    files.splice(i, 1); results.splice(i, 1);
+    renderQueue();
+    if (!files.length) document.getElementById('queue-section').style.display = 'none';
+  }
+
+  // ── PROCESSING ──
+  async function startProcessing() {
+    if (isProcessing || !files.length) return;
+    isProcessing = true;
+    setStep(2);
+    const btn = document.getElementById('process-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin"></span> Processing...';
+    document.getElementById('overall-progress').style.display = 'block';
+    document.getElementById('download-section').style.display = 'none';
+
+    let processedThisSession = 0;
+
+    for (let i = 0; i < files.length; i++) {
+      results[i].status = 'processing';
+      renderQueue();
+      updateProgress(i, files.length);
+      try {
+        const b64 = await toBase64(files[i]);
+        const resp = await fetch('/api/extract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageBase64: b64, mimeType: files[i].type })
+        });
+        const json = await resp.json();
+        if (json.success && json.data) {
+          results[i].data = json.data;
+          results[i].status = 'done';
+          processedThisSession++;
+        } else {
+          results[i].status = 'error';
+        }
+      } catch(e) {
+        results[i].status = 'error';
+      }
+      renderQueue();
+    }
+
+    // Update usage count
+    const usage = getUsage();
+    saveUsage(usage.count + processedThisSession);
+    updateUsageUI();
+
+    updateProgress(files.length, files.length);
+    isProcessing = false;
+    btn.disabled = false;
+    btn.innerHTML = '⚡ Re-process';
+    showDownload();
+  }
+
+  function updateProgress(done, total) {
+    const pct = total ? Math.round((done/total)*100) : 0;
+    document.getElementById('op-bar').style.width = pct + '%';
+    document.getElementById('progress-count').textContent = done + ' / ' + total;
+    document.getElementById('progress-label').textContent = done < total ? 'Reading bill ' + (done+1) + ' of ' + total + '...' : 'All done! Building XML...';
+  }
+
+  function showDownload() {
+    setStep(3);
+    const done = results.filter(r => r.status === 'done' && r.data);
+    const errors = results.filter(r => r.status === 'error');
+    const totalAmt = done.reduce((s,r) => s + Number(r.data.grand_total||0), 0);
+    const totalGst = done.reduce((s,r) => s + Number(r.data.total_gst||0), 0);
+    const totalItems = done.reduce((s,r) => s + (r.data.items||[]).length, 0);
+
+    document.getElementById('dl-subtitle').textContent = done.length + ' voucher' + (done.length!==1?'s':'') + ' extracted' + (errors.length ? ', ' + errors.length + ' failed' : '') + '.';
+
+    document.getElementById('summary-stats').innerHTML = `
+      <div class="stat-box"><div class="stat-val">${done.length}</div><div class="stat-lbl">Vouchers</div></div>
+      <div class="stat-box"><div class="stat-val">${totalItems}</div><div class="stat-lbl">Line items</div></div>
+      <div class="stat-box"><div class="stat-val">₹${totalAmt.toLocaleString('en-IN',{maximumFractionDigits:0})}</div><div class="stat-lbl">Total value</div></div>
+      <div class="stat-box"><div class="stat-val">₹${totalGst.toLocaleString('en-IN',{maximumFractionDigits:0})}</div><div class="stat-lbl">Total GST</div></div>`;
+
+    const tbody = document.getElementById('vouchers-tbody');
+    tbody.innerHTML = '';
+    done.forEach((r, i) => {
+      const d = r.data;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${i+1}</td><td class="mono">${d.date||'—'}</td><td class="mono">${d.voucher_no||'—'}</td>
+        <td style="font-weight:500;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.party_name||'—'}</td>
+        <td class="mono" style="font-size:11px;">${d.party_gstin||'—'}</td>
+        <td>${(d.items||[]).length}</td>
+        <td class="mono">₹${Number(d.subtotal||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
+        <td class="mono">₹${Number(d.total_gst||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
+        <td class="mono" style="font-weight:600;">₹${Number(d.grand_total||0).toLocaleString('en-IN',{maximumFractionDigits:2})}</td>
+        <td><span class="tag tag-blue">${d.voucher_type||'Purchase'}</span></td>`;
+      tbody.appendChild(tr);
+    });
+
+    fullXML = buildXML(done.map(r => r.data));
+    const preview = fullXML.substring(0, 2500) + (fullXML.length > 2500 ? '\n\n<!-- ... ' + done.length + ' vouchers · Download for full file -->' : '');
+    document.getElementById('xml-preview').innerHTML = syntaxHL(preview);
+    document.getElementById('download-section').style.display = 'block';
+    document.getElementById('download-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showToast('✓ ' + done.length + ' vouchers ready!');
+  }
+
+  // ── XML BUILDER ──
+  function buildXML(vouchers) {
+    const e = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const vxml = vouchers.map(d => {
+      const items = (d.items||[]).map(item => `        <ALLLEDGERENTRIES.LIST>
+          <LEDGERNAME>${e(item.description||'Stock Item')}</LEDGERNAME>
+          <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+          <AMOUNT>-${Number(item.amount||0).toFixed(2)}</AMOUNT>
+          <STOCKITEMNAME>${e(item.description||'')}</STOCKITEMNAME>
+          <ACTUALQTY>${item.qty||0} ${e(item.unit||'Nos')}</ACTUALQTY>
+          <BILLEDQTY>${item.qty||0} ${e(item.unit||'Nos')}</BILLEDQTY>
+          <RATE>${Number(item.rate||0).toFixed(2)}</RATE>
+        </ALLLEDGERENTRIES.LIST>`).join('\n');
+      return `      <TALLYMESSAGE xmlns:UDF="TallyUDF">
+        <VOUCHER VCHTYPE="${e(d.voucher_type||'Purchase')}" ACTION="Create">
+          <DATE>${(d.date||'').replace(/-/g,'')}</DATE>
+          <VOUCHERTYPENAME>${e(d.voucher_type||'Purchase')}</VOUCHERTYPENAME>
+          <VOUCHERNUMBER>${e(d.voucher_no||'')}</VOUCHERNUMBER>
+          <PARTYLEDGERNAME>${e(d.party_name||'')}</PARTYLEDGERNAME>
+          <EFFECTIVEDATE>${(d.date||'').replace(/-/g,'')}</EFFECTIVEDATE>
+          <NARRATION>${e(d.narration||'')}</NARRATION>
+${items}
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>${e(d.ledger_account||'Purchase Account')}</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>Yes</ISDEEMEDPOSITIVE>
+            <AMOUNT>${Number(d.grand_total||0).toFixed(2)}</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>CGST</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>-${Number(d.cgst||0).toFixed(2)}</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>SGST</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>-${Number(d.sgst||0).toFixed(2)}</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+          <ALLLEDGERENTRIES.LIST>
+            <LEDGERNAME>IGST</LEDGERNAME>
+            <ISDEEMEDPOSITIVE>No</ISDEEMEDPOSITIVE>
+            <AMOUNT>-${Number(d.igst||0).toFixed(2)}</AMOUNT>
+          </ALLLEDGERENTRIES.LIST>
+        </VOUCHER>
+      </TALLYMESSAGE>`;
+    }).join('\n\n');
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<ENVELOPE>
+  <HEADER><TALLYREQUEST>Import Data</TALLYREQUEST></HEADER>
+  <BODY>
+    <IMPORTDATA>
+      <REQUESTDESC>
+        <REPORTNAME>Vouchers</REPORTNAME>
+        <STATICVARIABLES><SVCURRENTCOMPANY>##SVCURRENTCOMPANY</SVCURRENTCOMPANY></STATICVARIABLES>
+      </REQUESTDESC>
+      <REQUESTDATA>
+${vxml}
+      </REQUESTDATA>
+    </IMPORTDATA>
+  </BODY>
+</ENVELOPE>`;
+  }
+
+  function syntaxHL(xml) {
+    return xml.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/(&lt;\/?[\w.]+)/g,'<span class="kw">$1</span>')
+      .replace(/&gt;([^&\n<]+)&lt;\//g,'&gt;<span class="val">$1</span>&lt;/');
+  }
+
+  function downloadXML() {
+    const blob = new Blob([fullXML], { type: 'text/xml' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const d = new Date();
+    a.download = `tally_import_${d.getFullYear()}_${String(d.getMonth()+1).padStart(2,'0')}.xml`;
+    a.click();
+    showToast('✓ Download started');
+  }
+
+  function copyXML() { navigator.clipboard.writeText(fullXML).then(() => showToast('✓ Copied!')); }
+
+  function clearAll() {
+    files = []; results = []; fullXML = '';
+    isProcessing = false;
+    document.getElementById('queue-section').style.display = 'none';
+    document.getElementById('download-section').style.display = 'none';
+    document.getElementById('limit-warning').style.display = 'none';
+    document.getElementById('file-input').value = '';
+    document.getElementById('op-bar').style.width = '0%';
+    document.getElementById('overall-progress').style.display = 'none';
+    const btn = document.getElementById('process-btn');
+    btn.disabled = false; btn.innerHTML = '⚡ Process all bills';
+    setStep(1);
+  }
+
+  function setStep(n) {
+    [1,2,3].forEach(i => {
+      const el = document.getElementById('step'+i);
+      if (i <= n) el.classList.add('active'); else el.classList.remove('active');
+    });
+  }
+
+  function toBase64(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = e => res(e.target.result.split(',')[1]);
+      r.onerror = () => rej(new Error('read failed'));
+      r.readAsDataURL(file);
+    });
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── INIT ──
+  updateUsageUI();
+</script>
+</body>
+</html>
