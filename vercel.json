@@ -4,8 +4,5 @@
       "memory": 512,
       "maxDuration": 30
     }
-  },
-  "rewrites": [
-    { "source": "/api/extract", "destination": "/api/extract.js" }
-  ]
+  }
 }
